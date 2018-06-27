@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/JaeyoLin/TSL_SOCCER#readme",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "moment-timezone": "^0.5.21",
     "request": "^2.87.0"
   }
 }
