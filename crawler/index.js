@@ -10,7 +10,7 @@ const Constant = require('./utility/Constant');
  * Main
  *
  */
-schedule.scheduleJob('*/30 * * * * *', () => {
+schedule.scheduleJob('*/60 * * * * *', () => {
   rateCrawler();
 });
 
