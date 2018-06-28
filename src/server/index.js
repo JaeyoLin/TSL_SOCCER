@@ -1,23 +1,28 @@
 const fs = require('fs');
 const schedule = require('node-schedule');
-const request = require("request");
-const cheerio = require("cheerio");
+const request = require('request');
+const cheerio = require('cheerio');
 const moment = require('moment-timezone');
+const appRoot = require('app-root-path');
 
-const Constant = require("../common/Constant");
+const Constant = require('../common/Constant');
 
-var j = schedule.scheduleJob('*/10 * * * * *', () => {
+/**
+ * Main
+ * 
+ */
+const j = schedule.scheduleJob('*/10 * * * * *', () => {
   rateCrawler();
 });
 
 /**
- * main
+ * rateCrawler
  */
-const rateCrawler = async () => {
+const rateCrawler = () => {
 
   console.log(`Crawler start: ${moment().format('YYYY-MM-DD HH:mm:ss')}`);
 
-  await request({
+  request({
     url: Constant.SOCCER_GAMES_JSON,
     method: 'GET',
     timeout: Constant.TIMEOUT,
@@ -33,8 +38,7 @@ const rateCrawler = async () => {
   
       if (data.length) {
         data.forEach((item, index) => {
-  
-          const fileName = `../../json/${item.code}-${item.kdt}.json`;
+          const fileName = `${appRoot}/json/${item.code}-${item.kdt}.json`;
   
           // 判斷是否已有賠率檔案
           let isExist = false;
