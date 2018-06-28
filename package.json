@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "crawler": "node src/server/index.js",
-    "eslint": "eslint ./src",
-    "start": "webpack-dev-server --mode development --open --hot",
-    "build": "webpack --mode production",
-    "deployToGitHub": "npm run build && gh-pages -d dist"
+    "crawler": "node crawler/index.js",
+    "start": "next -p 8000",
+    "build": "next build",
+    "prod": "next start -p 8000"
   },
   "repository": {
     "type": "git",
@@ -21,34 +20,23 @@
   },
   "homepage": "https://github.com/JaeyoLin/TSL_SOCCER#readme",
   "dependencies": {
+    "@material-ui/core": "^1.3.0",
     "app-root-path": "^2.1.0",
-    "cheerio": "^1.0.0-rc.2",
     "moment-timezone": "^0.5.21",
+    "next": "^6.0.3",
+    "node-fetch": "^2.1.2",
     "node-schedule": "^1.3.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "request": "^2.87.0"
+    "request": "^2.87.0",
+    "webpack": "^4.12.2"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "clean-webpack-plugin": "^0.1.19",
-    "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.8.2",
-    "gh-pages": "^1.1.0",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
-    "mini-css-extract-plugin": "^0.4.0",
-    "prettier": "^1.13.0",
-    "webpack": "^4.9.1",
-    "webpack-cli": "^2.1.4",
-    "webpack-dev-server": "^3.1.4",
-    "webpack-md5-hash": "0.0.6"
+    "prettier": "^1.13.0"
   }
 }
