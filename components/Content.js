@@ -98,13 +98,13 @@ const Content = props => {
                     {n.time}
                   </TableCell>
                   <TableCell className={aiClass} numeric>
-                    {n.ai}
+                    {parseFloat(Math.round(n.ai * 100) / 100).toFixed(2)}
                   </TableCell>
                   <TableCell className={drawClass} numeric>
-                    {n.draw}
+                    {parseFloat(Math.round(n.draw * 100) / 100).toFixed(2)}
                   </TableCell>
                   <TableCell className={hiClass} numeric>
-                    {n.hi}
+                    {parseFloat(Math.round(n.hi * 100) / 100).toFixed(2)}
                   </TableCell>
                 </TableRow>
               );
