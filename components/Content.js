@@ -7,12 +7,17 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Toolbar from '@material-ui/core/Toolbar';
 
 const styles = theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
+  },
+  title: {
+    flex: '0 0 auto',
   },
   table: {
     minWidth: '100%',
@@ -37,16 +42,35 @@ const styles = theme => ({
 const Content = props => {
   const { classes, gameData } = props;
 
-  const data = gameData.rates;
+  // 不讓球
+  const rates_single = gameData.rates_single;
+
+  // 讓球
+  const rates_handicap = gameData.rates_handicap;
+
+  // 2.5 大小
+  const rates_total_over_25 = gameData.rates_total_over_25;
+
+  // 進球數
+  const rates_point = gameData.rates_point;
+
+  // console.log('1');
 
   return (
     <div>
-      <p>賽事編號 {gameData.code}</p>
-      <p>日期 {gameData.date}</p>
-      <p>
+      <h2>賽事編號 {gameData.code}</h2>
+      <h2>日期 {gameData.date}</h2>
+      <h2>
         {gameData.teams.ai} @ {gameData.teams.hi}
-      </p>
+      </h2>
       <Paper className={classes.root}>
+        <Toolbar>
+          <div className={classes.title}>
+            <Typography variant="title" id="tableTitle">
+              不讓球
+            </Typography>
+          </div>
+        </Toolbar>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -63,27 +87,27 @@ const Content = props => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((n, index) => {
+            {rates_single.map((n, index) => {
               let aiClass = classes.draw;
               let drawClass = classes.draw;
               let hiClass = classes.draw;
 
               if (index !== 0) {
-                if (n.ai > data[index - 1].ai) {
+                if (n.ai > rates_single[index - 1].ai) {
                   aiClass = classes.asc;
-                } else if (n.ai < data[index - 1].ai) {
+                } else if (n.ai < rates_single[index - 1].ai) {
                   aiClass = classes.desc;
                 }
 
-                if (n.draw > data[index - 1].draw) {
+                if (n.draw > rates_single[index - 1].draw) {
                   drawClass = classes.asc;
-                } else if (n.draw < data[index - 1].draw) {
+                } else if (n.draw < rates_single[index - 1].draw) {
                   drawClass = classes.desc;
                 }
 
-                if (n.hi > data[index - 1].hi) {
+                if (n.hi > rates_single[index - 1].hi) {
                   hiClass = classes.asc;
-                } else if (n.hi < data[index - 1].hi) {
+                } else if (n.hi < rates_single[index - 1].hi) {
                   hiClass = classes.desc;
                 }
               }
@@ -105,6 +129,215 @@ const Content = props => {
                   </TableCell>
                   <TableCell className={hiClass} numeric>
                     {parseFloat(Math.round(n.hi * 100) / 100).toFixed(2)}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Paper>
+
+      <Paper className={classes.root}>
+        <Toolbar>
+          <div className={classes.title}>
+            <Typography variant="title" id="tableTitle">
+              讓球
+            </Typography>
+          </div>
+        </Toolbar>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.tablecell}>Time</TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                {gameData.teams.ai}
+              </TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                Draw
+              </TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                {gameData.teams.hi}
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rates_handicap.map((n, index) => {
+              let aiClass = classes.draw;
+              let drawClass = classes.draw;
+              let hiClass = classes.draw;
+
+              if (index !== 0) {
+                if (n.ai > rates_handicap[index - 1].ai) {
+                  aiClass = classes.asc;
+                } else if (n.ai < rates_handicap[index - 1].ai) {
+                  aiClass = classes.desc;
+                }
+
+                if (n.draw > rates_handicap[index - 1].draw) {
+                  drawClass = classes.asc;
+                } else if (n.draw < rates_handicap[index - 1].draw) {
+                  drawClass = classes.desc;
+                }
+
+                if (n.hi > rates_handicap[index - 1].hi) {
+                  hiClass = classes.asc;
+                } else if (n.hi < rates_handicap[index - 1].hi) {
+                  hiClass = classes.desc;
+                }
+              }
+
+              return (
+                <TableRow key={n.id}>
+                  <TableCell
+                    className={classes.tablecell}
+                    component="th"
+                    scope="row"
+                  >
+                    {n.time}
+                  </TableCell>
+                  <TableCell className={aiClass} numeric>
+                    {parseFloat(Math.round(n.ai * 100) / 100).toFixed(2)}
+                  </TableCell>
+                  <TableCell className={drawClass} numeric>
+                    {parseFloat(Math.round(n.draw * 100) / 100).toFixed(2)}
+                  </TableCell>
+                  <TableCell className={hiClass} numeric>
+                    {parseFloat(Math.round(n.hi * 100) / 100).toFixed(2)}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Paper>
+
+      <Paper className={classes.root}>
+        <Toolbar>
+          <div className={classes.title}>
+            <Typography variant="title" id="tableTitle">
+              2.5 大小
+            </Typography>
+          </div>
+        </Toolbar>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.tablecell}>Time</TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                Over
+              </TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                Under
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rates_total_over_25.map((n, index) => {
+              let overClass = classes.draw;
+              let underClass = classes.draw;
+
+              if (index !== 0) {
+                if (n.over > rates_total_over_25[index - 1].over) {
+                  overClass = classes.asc;
+                } else if (n.over < rates_total_over_25[index - 1].over) {
+                  overClass = classes.desc;
+                }
+
+                if (n.under > rates_total_over_25[index - 1].under) {
+                  underClass = classes.asc;
+                } else if (n.under < rates_total_over_25[index - 1].under) {
+                  underClass = classes.desc;
+                }
+              }
+
+              return (
+                <TableRow key={n.id}>
+                  <TableCell
+                    className={classes.tablecell}
+                    component="th"
+                    scope="row"
+                  >
+                    {n.time}
+                  </TableCell>
+                  <TableCell className={overClass} numeric>
+                    {parseFloat(Math.round(n.over * 100) / 100).toFixed(2)}
+                  </TableCell>
+                  <TableCell className={underClass} numeric>
+                    {parseFloat(Math.round(n.under * 100) / 100).toFixed(2)}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Paper>
+
+      <Paper className={classes.root}>
+        <Toolbar>
+          <div className={classes.title}>
+            <Typography variant="title" id="tableTitle">
+              進球數
+            </Typography>
+          </div>
+        </Toolbar>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.tablecell}>Time</TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                0 - 1
+              </TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                2 - 3
+              </TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                4 +
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rates_point.map((n, index) => {
+              let aClass = classes.draw;
+              let bClass = classes.draw;
+              let cClass = classes.draw;
+
+              if (index !== 0) {
+                if (n.A > rates_point[index - 1].A) {
+                  aClass = classes.asc;
+                } else if (n.A < rates_point[index - 1].A) {
+                  aClass = classes.desc;
+                }
+
+                if (n.B > rates_point[index - 1].B) {
+                  bClass = classes.asc;
+                } else if (n.B < rates_point[index - 1].B) {
+                  bClass = classes.desc;
+                }
+
+                if (n.C > rates_point[index - 1].C) {
+                  cClass = classes.asc;
+                } else if (n.C < rates_point[index - 1].C) {
+                  cClass = classes.desc;
+                }
+              }
+
+              return (
+                <TableRow key={n.id}>
+                  <TableCell
+                    className={classes.tablecell}
+                    component="th"
+                    scope="row"
+                  >
+                    {n.time}
+                  </TableCell>
+                  <TableCell className={aClass} numeric>
+                    {parseFloat(Math.round(n.A * 100) / 100).toFixed(2)}
+                  </TableCell>
+                  <TableCell className={bClass} numeric>
+                    {parseFloat(Math.round(n.B * 100) / 100).toFixed(2)}
+                  </TableCell>
+                  <TableCell className={cClass} numeric>
+                    {parseFloat(Math.round(n.C * 100) / 100).toFixed(2)}
                   </TableCell>
                 </TableRow>
               );

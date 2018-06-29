@@ -33,5 +33,6 @@ module.exports = {
     'prettier/prettier': 'error',
     'comma-dangle': [2, 'always-multiline'],
     'react/jsx-filename-extension': [0],
+    beforeBlockComment: true,
   },
 };
