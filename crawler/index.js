@@ -14,9 +14,9 @@ const getDateNow = () => {
  * Main
  *
  */
-// schedule.scheduleJob('*/60 * * * * *', () => {
-//   rateCrawler();
-// });
+schedule.scheduleJob('*/600 * * * * *', () => {
+  rateCrawler();
+});
 
 /**
  * getGames
@@ -539,4 +539,4 @@ String.prototype.format = function() {
   return a;
 };
 
-rateCrawler();
+// rateCrawler();
