@@ -1,15 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { Table } from 'reactstrap';
+import Toolbar from '@material-ui/core/Toolbar';
+import Divider from '@material-ui/core/Divider';
 
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 1,
+    marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
   table: {
@@ -18,19 +23,15 @@ const styles = theme => ({
   title: {
     flex: '0 0 auto',
   },
-  draw: {
-    textAlign: 'center',
+  tablecell: {
+    width: '10%',
   },
+  draw: {},
   desc: {
     color: 'red',
-    textAlign: 'center',
   },
   asc: {
     color: 'green',
-    textAlign: 'center',
-  },
-  time: {
-    textAlign: 'center',
   },
 });
 
@@ -61,29 +62,29 @@ const Content = props => {
 
   return (
     <div>
-      <h3>賽事編號 {code}</h3>
-      <h3>日期 {date}</h3>
-      <h3>
+      <h2>賽事編號 {code}</h2>
+      <h2>日期 {date}</h2>
+      <h2>
         {aiName} @ {hiName}
-      </h3>
+      </h2>
+
       <Paper className={classes.root}>
-        <Toolbar>
-          <div className={classes.title}>
-            <Typography variant="title" id="tableTitle">
-              不讓球
-            </Typography>
-          </div>
-        </Toolbar>
         <Table className={classes.table}>
-          <thead>
-            <tr>
-              <th>{aiName}</th>
-              <th>和局</th>
-              <th>{hiName}</th>
-              <th>更新時間</th>
-            </tr>
-          </thead>
-          <tbody>
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.tablecell}>Time</TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                {aiName}
+              </TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                Draw
+              </TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                {hiName}
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {rates_single.map((n, index) => {
               let aiClass = classes.draw;
               let drawClass = classes.draw;
@@ -110,42 +111,41 @@ const Content = props => {
               }
 
               return (
-                <tr key={`rates_single_${index}`}>
-                  <td className={aiClass}>
+                <TableRow key={`rates_single_${index}`}>
+                  <TableCell className={classes.tablecell}>{n.time}</TableCell>
+                  <TableCell className={aiClass} numeric>
                     {parseFloat(Math.round(n.ai * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={drawClass}>
+                  </TableCell>
+                  <TableCell className={drawClass} numeric>
                     {parseFloat(Math.round(n.draw * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={hiClass}>
+                  </TableCell>
+                  <TableCell className={hiClass} numeric>
                     {parseFloat(Math.round(n.hi * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={classes.time}>{n.time}</td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               );
             })}
-          </tbody>
+          </TableBody>
         </Table>
       </Paper>
 
       <Paper className={classes.root}>
-        <Toolbar>
-          <div className={classes.title}>
-            <Typography variant="title" id="tableTitle">
-              讓球
-            </Typography>
-          </div>
-        </Toolbar>
         <Table className={classes.table}>
-          <thead>
-            <tr>
-              <th>{aiName}</th>
-              <th>和局</th>
-              <th>{hiName}</th>
-              <th>更新時間</th>
-            </tr>
-          </thead>
-          <tbody>
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.tablecell}>Time</TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                {aiName}
+              </TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                Draw
+              </TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                {hiName}
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {rates_handicap.map((n, index) => {
               let aiClass = classes.draw;
               let drawClass = classes.draw;
@@ -172,41 +172,38 @@ const Content = props => {
               }
 
               return (
-                <tr key={`rates_handicap_${index}`}>
-                  <td className={aiClass}>
+                <TableRow key={`rates_handicap_${index}`}>
+                  <TableCell className={classes.tablecell}>{n.time}</TableCell>
+                  <TableCell className={aiClass} numeric>
                     {parseFloat(Math.round(n.ai * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={drawClass}>
+                  </TableCell>
+                  <TableCell className={drawClass} numeric>
                     {parseFloat(Math.round(n.draw * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={hiClass}>
+                  </TableCell>
+                  <TableCell className={hiClass} numeric>
                     {parseFloat(Math.round(n.hi * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={classes.time}>{n.time}</td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               );
             })}
-          </tbody>
+          </TableBody>
         </Table>
       </Paper>
 
       <Paper className={classes.root}>
-        <Toolbar>
-          <div className={classes.title}>
-            <Typography variant="title" id="tableTitle">
-              2.5 大小
-            </Typography>
-          </div>
-        </Toolbar>
         <Table className={classes.table}>
-          <thead>
-            <tr>
-              <th>大</th>
-              <th>小</th>
-              <th>更新時間</th>
-            </tr>
-          </thead>
-          <tbody>
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.tablecell}>Time</TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                Over
+              </TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                Under
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {rates_total_over_25.map((n, index) => {
               let overClass = classes.draw;
               let underClass = classes.draw;
@@ -226,39 +223,38 @@ const Content = props => {
               }
 
               return (
-                <tr key={`rates_total_over_25_${index}`}>
-                  <td className={overClass}>
+                <TableRow key={`rates_total_over_25_${index}`}>
+                  <TableCell className={classes.tablecell}>{n.time}</TableCell>
+                  <TableCell className={overClass} numeric>
                     {parseFloat(Math.round(n.over * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={underClass}>
+                  </TableCell>
+                  <TableCell className={underClass} numeric>
                     {parseFloat(Math.round(n.under * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={classes.time}>{n.time}</td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               );
             })}
-          </tbody>
+          </TableBody>
         </Table>
       </Paper>
 
       <Paper className={classes.root}>
-        <Toolbar>
-          <div className={classes.title}>
-            <Typography variant="title" id="tableTitle">
-              進球數
-            </Typography>
-          </div>
-        </Toolbar>
         <Table className={classes.table}>
-          <thead>
-            <tr>
-              <th>0 - 1</th>
-              <th>2 - 3</th>
-              <th>4 +</th>
-              <th>更新時間</th>
-            </tr>
-          </thead>
-          <tbody>
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.tablecell}>Time</TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                0 - 1
+              </TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                2 - 3
+              </TableCell>
+              <TableCell className={classes.tablecell} numeric>
+                4 +
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {rates_point.map((n, index) => {
               let aClass = classes.draw;
               let bClass = classes.draw;
@@ -285,21 +281,21 @@ const Content = props => {
               }
 
               return (
-                <tr key={`rates_point_${index}`}>
-                  <td className={aClass} numeric>
+                <TableRow key={`rates_point_${index}`}>
+                  <TableCell className={classes.tablecell}>{n.time}</TableCell>
+                  <TableCell className={aClass} numeric>
                     {parseFloat(Math.round(n.A * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={bClass} numeric>
+                  </TableCell>
+                  <TableCell className={bClass} numeric>
                     {parseFloat(Math.round(n.B * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={cClass} numeric>
+                  </TableCell>
+                  <TableCell className={cClass} numeric>
                     {parseFloat(Math.round(n.C * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={classes.time}>{n.time}</td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               );
             })}
-          </tbody>
+          </TableBody>
         </Table>
       </Paper>
     </div>

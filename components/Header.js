@@ -6,11 +6,16 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import Avatar from '@material-ui/core/Avatar';
 import styles from '../utils/styles';
 import classNames from 'classnames';
 
 const Header = props => {
   const { classes, open, handleDrawerOpen } = props;
+
+  const testModal = () => {
+    alert('~~呆呆領域~~');
+  };
 
   return (
     <AppBar
@@ -30,6 +35,14 @@ const Header = props => {
         <Typography variant="title" color="inherit" noWrap>
           TSL SOCCER
         </Typography>
+        <Avatar
+          alt="Remy Sharp"
+          src="/static/assets/test.jpg"
+          className={classes.avatar}
+          onClick={() => {
+            testModal();
+          }}
+        />
       </Toolbar>
     </AppBar>
   );
