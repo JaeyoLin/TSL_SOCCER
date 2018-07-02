@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 
 import App from '../components/App';
 
@@ -11,6 +12,17 @@ export default class extends React.Component {
   }
 
   render() {
-    return <App data={this.props.data} />;
+    return (
+      <div>
+        <Head>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+          <meta charSet="utf-8" />
+        </Head>
+        <App data={this.props.data} />
+      </div>
+    );
   }
 }

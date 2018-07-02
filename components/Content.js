@@ -16,12 +16,12 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
+  table: {
+    width: '100%',
+    fontSize: '20px',
+  },
   title: {
     flex: '0 0 auto',
-  },
-  table: {
-    minWidth: '100%',
-    fontSize: '20px',
   },
   tablecell: {
     fontSize: '20px',
@@ -42,26 +42,34 @@ const styles = theme => ({
 const Content = props => {
   const { classes, gameData } = props;
 
-  // 不讓球
-  const rates_single = gameData.rates_single;
+  let code = '';
+  let date = '';
+  let aiName = '';
+  let hiName = '';
 
-  // 讓球
-  const rates_handicap = gameData.rates_handicap;
+  let rates_single = []; // 不讓球
+  let rates_handicap = []; // 讓球
+  let rates_total_over_25 = []; // 2.5 大小
+  let rates_point = []; // 進球數
 
-  // 2.5 大小
-  const rates_total_over_25 = gameData.rates_total_over_25;
+  if (gameData) {
+    code = gameData.code;
+    date = gameData.date;
+    aiName = gameData.teams.ai;
+    hiName = gameData.teams.hi;
 
-  // 進球數
-  const rates_point = gameData.rates_point;
-
-  // console.log('1');
+    rates_single = gameData.rates_single;
+    rates_handicap = gameData.rates_handicap;
+    rates_total_over_25 = gameData.rates_total_over_25;
+    rates_point = gameData.rates_point;
+  }
 
   return (
     <div>
-      <h2>賽事編號 {gameData.code}</h2>
-      <h2>日期 {gameData.date}</h2>
+      <h2>賽事編號 {code}</h2>
+      <h2>日期 {date}</h2>
       <h2>
-        {gameData.teams.ai} @ {gameData.teams.hi}
+        {aiName} @ {hiName}
       </h2>
       <Paper className={classes.root}>
         <Toolbar>
@@ -76,13 +84,13 @@ const Content = props => {
             <TableRow>
               <TableCell className={classes.tablecell}>Time</TableCell>
               <TableCell className={classes.tablecell} numeric>
-                {gameData.teams.ai}
+                {aiName}
               </TableCell>
               <TableCell className={classes.tablecell} numeric>
                 Draw
               </TableCell>
               <TableCell className={classes.tablecell} numeric>
-                {gameData.teams.hi}
+                {hiName}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -150,13 +158,13 @@ const Content = props => {
             <TableRow>
               <TableCell className={classes.tablecell}>Time</TableCell>
               <TableCell className={classes.tablecell} numeric>
-                {gameData.teams.ai}
+                {aiName}
               </TableCell>
               <TableCell className={classes.tablecell} numeric>
                 Draw
               </TableCell>
               <TableCell className={classes.tablecell} numeric>
-                {gameData.teams.hi}
+                {hiName}
               </TableCell>
             </TableRow>
           </TableHead>

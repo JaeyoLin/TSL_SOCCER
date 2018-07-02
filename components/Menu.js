@@ -5,12 +5,15 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import styles from '../utils/styles';
 
 const Header = props => {
-  const { classes, data } = props;
-
+  const { classes, data, open, handleDrawerClose } = props;
   const listItems = [];
   if (data) {
     data.forEach(item => {
@@ -31,12 +34,18 @@ const Header = props => {
 
   return (
     <Drawer
-      variant="permanent"
+      open={open}
+      variant="persistent"
       classes={{
         paper: classes.drawerPaper,
       }}
     >
-      <div className={classes.toolbar} />
+      <div className={classes.drawerHeader}>
+        <IconButton onClick={handleDrawerClose}>
+          <ChevronLeftIcon />
+        </IconButton>
+      </div>
+      <Divider />
       <List>{listItems}</List>
     </Drawer>
   );
@@ -46,6 +55,8 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.array.isRequired,
   selectGame: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  handleDrawerClose: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Header);

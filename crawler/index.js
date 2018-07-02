@@ -14,9 +14,9 @@ const getDateNow = () => {
  * Main
  *
  */
-schedule.scheduleJob('*/600 * * * * *', () => {
-  rateCrawler();
-});
+// schedule.scheduleJob('*/600 * * * * *', () => {
+//   rateCrawler();
+// });
 
 /**
  * getGames
@@ -77,11 +77,6 @@ const getGameDetail = ni => {
 
           reject({ error });
         } else {
-          console.log(
-            'StatusCode - Get details:',
-            response && response.statusCode
-          );
-
           let detailData = null;
           if (response && response.statusCode === 200) {
             detailData = JSON.parse(body);
@@ -128,7 +123,7 @@ const getRates = (type, detail) => {
       switch (c) {
         // 客勝
         case awayWin:
-          rate.hi = tmp.oddPerSet[1];
+          rate.ai = tmp.oddPerSet[1];
           break;
 
         // 合局
@@ -138,10 +133,14 @@ const getRates = (type, detail) => {
 
         // 主勝
         case homeWin:
-          rate.ai = tmp.oddPerSet[1];
+          rate.hi = tmp.oddPerSet[1];
           break;
       }
     });
+  }
+
+  if (rate.ai === 0) {
+    return null;
   }
 
   return rate;
@@ -178,6 +177,10 @@ const getTotalOver25 = detail => {
           break;
       }
     });
+  }
+
+  if (rate.over === 0) {
+    return null;
   }
 
   return rate;
@@ -220,6 +223,10 @@ const getPonit = detail => {
     });
   }
 
+  if (rate.A === 0) {
+    return null;
+  }
+
   return rate;
 };
 
@@ -235,18 +242,18 @@ const checkRates = (type, obj, detail) => {
   let draw = Constant.GAME_TYPE.SINGLE.TYPE.DRAW;
   let homeWin = Constant.GAME_TYPE.SINGLE.TYPE.HOME_WIN;
 
-  let aiRate = obj.rates_single[obj.rates_single.length - 1].hi;
+  let aiRate = obj.rates_single[obj.rates_single.length - 1].ai;
   let drawRate = obj.rates_single[obj.rates_single.length - 1].draw;
-  let hiRate = obj.rates_single[obj.rates_single.length - 1].ai;
+  let hiRate = obj.rates_single[obj.rates_single.length - 1].hi;
 
   if (type === 1) {
     awayWin = Constant.GAME_TYPE.HANDICAP.TYPE.AWAY_WIN;
     draw = Constant.GAME_TYPE.HANDICAP.TYPE.DRAW;
     homeWin = Constant.GAME_TYPE.HANDICAP.TYPE.HOME_WIN;
 
-    aiRate = obj.rates_handicap[obj.rates_handicap.length - 1].hi;
+    aiRate = obj.rates_handicap[obj.rates_handicap.length - 1].ai;
     drawRate = obj.rates_handicap[obj.rates_handicap.length - 1].draw;
-    hiRate = obj.rates_handicap[obj.rates_handicap.length - 1].ai;
+    hiRate = obj.rates_handicap[obj.rates_handicap.length - 1].hi;
   }
 
   // 比較賠率是否有變動
@@ -388,7 +395,8 @@ const saveFile = (fileName, json) => {
  * @param {*} detailData
  */
 const compareData = detailData => {
-  const fileName = `${appRoot}/json/${detailData.code}.json`;
+  const gameDate = moment(detailData.kdt).format('YYYYMMDD');
+  const fileName = `${appRoot}/json/${detailData.code}_${gameDate}.json`;
 
   // 判斷是否已有賠率檔案
   let isExist = false;
@@ -415,37 +423,43 @@ const compareData = detailData => {
 
     // 寫入各賠率
     detailData.markets.forEach(detail => {
+      let tmp = null;
+
       if (detail.g === Constant.GAME_TYPE.SINGLE.g) {
         // 不讓
         // 取得不讓球主客合賠率
-        if (checkRates(0, obj, detail)) {
+        tmp = getRates(0, detail);
+        if (checkRates(0, obj, detail) && tmp) {
           console.log(`${obj.code} - Rates is changed.`);
-          obj.rates_single.push(getRates(0, detail));
+          obj.rates_single.push(tmp);
         }
       } else if (detail.g === Constant.GAME_TYPE.HANDICAP.g) {
         // 讓球
         // 取得讓球主客合賠率
-        if (checkRates(1, obj, detail)) {
+        tmp = getRates(1, detail);
+        if (checkRates(1, obj, detail) && tmp) {
           console.log(`${obj.code} - Rates is changed.`);
-          obj.rates_handicap.push(getRates(1, detail));
+          obj.rates_handicap.push(tmp);
         }
       } else if (
         detail.g === Constant.GAME_TYPE.TOTAL_OVER_25.g &&
         detail.v1 === Constant.GAME_TYPE.TOTAL_OVER_25.v1
       ) {
         // 2.5 大小
-        if (checkTotalOver25(obj, detail)) {
+        tmp = getTotalOver25(detail);
+        if (checkTotalOver25(obj, detail) && tmp) {
           console.log(`${obj.code} - Rates is changed.`);
-          obj.rates_total_over_25.push(getTotalOver25(detail));
+          obj.rates_total_over_25.push(tmp);
         }
       } else if (
         detail.g === Constant.GAME_TYPE.POINT.g &&
         detail.fi === Constant.GAME_TYPE.POINT.fi
       ) {
         // 進球數
-        if (checkPonit(obj, detail)) {
+        tmp = getPonit(detail);
+        if (checkPonit(obj, detail) && tmp) {
           console.log(`${obj.code} - Rates is changed.`);
-          obj.rates_point.push(getPonit(detail));
+          obj.rates_point.push(tmp);
         }
       }
 
@@ -466,26 +480,40 @@ const compareData = detailData => {
 
     // 寫入各賠率
     detailData.markets.forEach(detail => {
+      let tmp = null;
+
       if (detail.g === Constant.GAME_TYPE.SINGLE.g) {
         // 不讓
         // 取得不讓球主客合賠率
-        obj.rates_single.push(getRates(0, detail));
+        tmp = getRates(0, detail);
+        if (tmp) {
+          obj.rates_single.push(tmp);
+        }
       } else if (detail.g === Constant.GAME_TYPE.HANDICAP.g) {
         // 讓球
         // 取得讓球主客合賠率
-        obj.rates_handicap.push(getRates(1, detail));
+        tmp = getRates(1, detail);
+        if (tmp) {
+          obj.rates_handicap.push(tmp);
+        }
       } else if (
         detail.g === Constant.GAME_TYPE.TOTAL_OVER_25.g &&
         detail.v1 === Constant.GAME_TYPE.TOTAL_OVER_25.v1
       ) {
         // 2.5 大小
-        obj.rates_total_over_25.push(getTotalOver25(detail));
+        tmp = getTotalOver25(detail);
+        if (tmp) {
+          obj.rates_total_over_25.push(tmp);
+        }
       } else if (
         detail.g === Constant.GAME_TYPE.POINT.g &&
         detail.fi === Constant.GAME_TYPE.POINT.fi
       ) {
         // 進球數
-        obj.rates_point.push(getPonit(detail));
+        tmp = getPonit(detail);
+        if (tmp) {
+          obj.rates_point.push(tmp);
+        }
       }
     });
 
@@ -499,7 +527,11 @@ const compareData = detailData => {
  *
  */
 const rateCrawler = async () => {
-  console.log(`Crawler start: ${moment().format('YYYY-MM-DD HH:mm:ss')}`);
+  console.log(
+    `=========== Crawler start: ${moment().format(
+      'YYYY-MM-DD HH:mm:ss'
+    )} ==========`
+  );
 
   // 取得所有足球賽事
   let data = null;
@@ -539,4 +571,4 @@ String.prototype.format = function() {
   return a;
 };
 
-// rateCrawler();
+rateCrawler();
