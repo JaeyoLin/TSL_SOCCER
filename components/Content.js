@@ -59,6 +59,22 @@ const Content = props => {
     rates_point = gameData.rates_point;
   }
 
+  // 讓球 title 顯示
+  let aiHandicap = aiName; // 客
+  let hiHandicap = hiName; // 主
+
+  if (rates_handicap && rates_handicap.length && rates_handicap.length > 0) {
+    const v1 = rates_handicap[0].v1;
+
+    if (v1 === -1) {
+      aiHandicap = `${aiHandicap} (+1)`;
+      hiHandicap = `${hiHandicap} (-1)`;
+    } else {
+      aiHandicap = `${aiHandicap} (-1)`;
+      hiHandicap = `${hiHandicap} (+1)`;
+    }
+  }
+
   return (
     <div>
       <h3>賽事編號 {code}</h3>
@@ -139,9 +155,9 @@ const Content = props => {
         <Table className={classes.table}>
           <thead>
             <tr>
-              <th>{aiName}</th>
+              <th>{aiHandicap}</th>
               <th>和局</th>
-              <th>{hiName}</th>
+              <th>{hiHandicap}</th>
               <th>更新時間</th>
             </tr>
           </thead>

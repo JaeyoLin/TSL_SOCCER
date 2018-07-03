@@ -117,8 +117,14 @@ const getRates = (type, detail) => {
     hi: 0,
     draw: 0,
     ai: 0,
+    v: '',
+    v1: '',
     time: getDateNow(),
   };
+
+  // 塞入讓球
+  rate.v = detail.v;
+  rate.v1 = detail.v1;
 
   const tmpArray = detail.codes;
   if (tmpArray) {
