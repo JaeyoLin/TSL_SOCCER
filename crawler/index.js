@@ -4,6 +4,7 @@ const request = require('request');
 const moment = require('moment-timezone');
 const appRoot = require('app-root-path');
 
+const Line = require('./LineBot/Line');
 const Constant = require('./utility/Constant');
 
 // json folder
@@ -425,6 +426,8 @@ const compareData = detailData => {
     // 已有檔案
     obj = JSON.parse(fs.readFileSync(fileName, 'utf8'));
 
+    let isChange = false;
+
     // 寫入各賠率
     detailData.markets.forEach(detail => {
       let tmp = null;
@@ -434,7 +437,7 @@ const compareData = detailData => {
         // 取得不讓球主客合賠率
         tmp = getRates(0, detail);
         if (checkRates(0, obj, detail) && tmp) {
-          console.log(`${obj.code} - Rates is changed.`);
+          isChange = true;
           obj.rates_single.push(tmp);
         }
       } else if (detail.g === Constant.GAME_TYPE.HANDICAP.g) {
@@ -442,7 +445,7 @@ const compareData = detailData => {
         // 取得讓球主客合賠率
         tmp = getRates(1, detail);
         if (checkRates(1, obj, detail) && tmp) {
-          console.log(`${obj.code} - Rates is changed.`);
+          isChange = true;
           obj.rates_handicap.push(tmp);
         }
       } else if (
@@ -452,7 +455,7 @@ const compareData = detailData => {
         // 2.5 大小
         tmp = getTotalOver25(detail);
         if (checkTotalOver25(obj, detail) && tmp) {
-          console.log(`${obj.code} - Rates is changed.`);
+          isChange = true;
           obj.rates_total_over_25.push(tmp);
         }
       } else if (
@@ -462,14 +465,19 @@ const compareData = detailData => {
         // 進球數
         tmp = getPonit(detail);
         if (checkPonit(obj, detail) && tmp) {
-          console.log(`${obj.code} - Rates is changed.`);
+          isChange = true;
           obj.rates_point.push(tmp);
         }
       }
-
-      // 寫入檔案
-      saveFile(fileName, JSON.stringify(obj));
     });
+
+    if (isChange) {
+      console.log(`${obj.code} - Rates is changed.`);
+      Line.sendMessage(`${obj.code} - Rates is changed.`);
+    }
+
+    // 寫入檔案
+    saveFile(fileName, JSON.stringify(obj));
   } else {
     // 賽事編號
     obj.code = detailData.code;
