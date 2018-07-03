@@ -6,17 +6,21 @@ const appRoot = require('app-root-path');
 
 const Constant = require('./utility/Constant');
 
+// json folder
+const folderPath = `${appRoot}/json`;
+
+// 建立 json 資料夾
+if (!fs.existsSync(folderPath)) {
+  fs.mkdirSync(folderPath);
+}
+
+/**
+ * getDateNow
+ *
+ */
 const getDateNow = () => {
   return moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm');
 };
-
-/**
- * Main
- *
- */
-schedule.scheduleJob('*/600 * * * * *', () => {
-  rateCrawler();
-});
 
 /**
  * getGames
@@ -571,4 +575,13 @@ String.prototype.format = function() {
   return a;
 };
 
-// rateCrawler();
+// 第一次執行
+rateCrawler();
+
+/**
+ * Main
+ *
+ */
+schedule.scheduleJob('*/600 * * * * *', () => {
+  rateCrawler();
+});
