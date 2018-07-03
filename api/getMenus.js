@@ -12,24 +12,34 @@ const getMenus = () => {
 
       let menus = [];
 
-      fs.readdir(`${appRoot}/json/`, (err, files) => {
-        if (err) {
-          reject({
-            err,
+      if (fs.existsSync(`${appRoot}/json/`)) {
+        fs.readdir(`${appRoot}/json/`, (err, files) => {
+          if (err) {
+            reject({
+              err,
+            });
+          }
+
+          if (files && files.length) {
+            files.forEach(file => {
+              let obj = {};
+              obj = JSON.parse(
+                fs.readFileSync(`${appRoot}/json/${file}`, 'utf8')
+              );
+
+              menus.push(obj);
+            });
+          }
+
+          resolve({
+            data: menus,
           });
-        }
-
-        files.forEach(file => {
-          let obj = {};
-          obj = JSON.parse(fs.readFileSync(`${appRoot}/json/${file}`, 'utf8'));
-
-          menus.push(obj);
         });
-
+      } else {
         resolve({
           data: menus,
         });
-      });
+      }
     }
   });
 };
