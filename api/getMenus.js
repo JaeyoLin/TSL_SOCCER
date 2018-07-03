@@ -1,3 +1,8 @@
+/**
+ * getMenus
+ * 取得 json 底下所有檔案及賠率
+ *
+ */
 const getMenus = () => {
   return new Promise((resolve, reject) => {
     const isServer = typeof window === 'undefined';
