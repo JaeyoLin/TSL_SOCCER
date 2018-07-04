@@ -42,17 +42,17 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="1:0"
+            title="1 : 0"
             rate={rate['1_0']}
             compareRate={compareRate['1_0']}
           />
           <DataCell
-            title="0:0"
+            title="0 : 0"
             rate={rate['0_0']}
             compareRate={compareRate['0_0']}
           />
           <DataCell
-            title="0:1"
+            title="0 : 1"
             rate={rate['0_1']}
             compareRate={compareRate['0_1']}
           />
@@ -60,17 +60,17 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="2:0"
+            title="2 : 0"
             rate={rate['2_0']}
             compareRate={compareRate['2_0']}
           />
           <DataCell
-            title="1:1"
+            title="1 : 1"
             rate={rate['1_1']}
             compareRate={compareRate['1_1']}
           />
           <DataCell
-            title="0:2"
+            title="0 : 2"
             rate={rate['0_2']}
             compareRate={compareRate['0_2']}
           />
@@ -78,17 +78,17 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="2:1"
+            title="2 : 1"
             rate={rate['2_1']}
             compareRate={compareRate['2_1']}
           />
           <DataCell
-            title="2:2"
+            title="2 : 2"
             rate={rate['2_2']}
             compareRate={compareRate['2_2']}
           />
           <DataCell
-            title="1:2"
+            title="1 : 2"
             rate={rate['1_2']}
             compareRate={compareRate['1_2']}
           />
@@ -96,17 +96,17 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="3:0"
+            title="3 : 0"
             rate={rate['3_0']}
             compareRate={compareRate['3_0']}
           />
           <DataCell
-            title="3:3"
+            title="3 : 3"
             rate={rate['3_3']}
             compareRate={compareRate['3_3']}
           />
           <DataCell
-            title="0:3"
+            title="0 : 3"
             rate={rate['0_3']}
             compareRate={compareRate['0_3']}
           />
@@ -114,17 +114,17 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="3:1"
+            title="3 : 1"
             rate={rate['3_1']}
             compareRate={compareRate['3_1']}
           />
           <DataCell
-            title="4:4"
+            title="4 : 4"
             rate={rate['4_4']}
             compareRate={compareRate['4_4']}
           />
           <DataCell
-            title="1:3"
+            title="1 : 3"
             rate={rate['1_3']}
             compareRate={compareRate['1_3']}
           />
@@ -132,17 +132,17 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="3:2"
+            title="3 : 2"
             rate={rate['3_2']}
             compareRate={compareRate['3_2']}
           />
           <DataCell
-            title="5+:5+"
+            title="5+ : 5+"
             rate={rate['5_5']}
             compareRate={compareRate['5_5']}
           />
           <DataCell
-            title="2:3"
+            title="2 : 3"
             rate={rate['2_3']}
             compareRate={compareRate['2_3']}
           />
@@ -150,13 +150,13 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="4:0"
+            title="4 : 0"
             rate={rate['4_0']}
             compareRate={compareRate['4_0']}
           />
           <DataCell />
           <DataCell
-            title="0:4"
+            title="0 : 4"
             rate={rate['0_4']}
             compareRate={compareRate['0_4']}
           />
@@ -164,13 +164,13 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="4:1"
+            title="4 : 1"
             rate={rate['4_1']}
             compareRate={compareRate['4_1']}
           />
           <DataCell />
           <DataCell
-            title="1:4"
+            title="1 : 4"
             rate={rate['1_4']}
             compareRate={compareRate['1_4']}
           />
@@ -178,13 +178,13 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="4:2"
+            title="4 : 2"
             rate={rate['4_2']}
             compareRate={compareRate['4_2']}
           />
           <DataCell />
           <DataCell
-            title="2:4"
+            title="2 : 4"
             rate={rate['2_4']}
             compareRate={compareRate['2_4']}
           />
@@ -192,13 +192,13 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="4:3"
+            title="4 : 3"
             rate={rate['4_3']}
             compareRate={compareRate['4_3']}
           />
           <DataCell />
           <DataCell
-            title="3:4"
+            title="3 : 4"
             rate={rate['3_4']}
             compareRate={compareRate['3_4']}
           />
@@ -206,13 +206,13 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="5+:0"
+            title="5+ : 0"
             rate={rate['5_0']}
             compareRate={compareRate['5_0']}
           />
           <DataCell />
           <DataCell
-            title="0:5+"
+            title="0 : 5+"
             rate={rate['0_5']}
             compareRate={compareRate['0_5']}
           />
@@ -220,13 +220,13 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="5+:1"
+            title="5+ : 1"
             rate={rate['5_1']}
             compareRate={compareRate['5_1']}
           />
           <DataCell />
           <DataCell
-            title="1:5+"
+            title="1 : 5+"
             rate={rate['1_5']}
             compareRate={compareRate['1_5']}
           />
@@ -234,13 +234,13 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="5+:2"
+            title="5+ : 2"
             rate={rate['5_2']}
             compareRate={compareRate['5_2']}
           />
           <DataCell />
           <DataCell
-            title="2:5+"
+            title="2 : 5+"
             rate={rate['2_5']}
             compareRate={compareRate['2_5']}
           />
@@ -248,13 +248,13 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="5+:3"
+            title="5+ : 3"
             rate={rate['5_3']}
             compareRate={compareRate['5_3']}
           />
           <DataCell />
           <DataCell
-            title="3:5+"
+            title="3 : 5+"
             rate={rate['3_5']}
             compareRate={compareRate['3_5']}
           />
@@ -262,13 +262,13 @@ class Score extends React.Component {
         <Divider className={classes.hr} />
         <Row>
           <DataCell
-            title="5+:4"
+            title="5+ : 4"
             rate={rate['5_4']}
             compareRate={compareRate['5_4']}
           />
           <DataCell />
           <DataCell
-            title="4:5+"
+            title="4 : 5+"
             rate={rate['4_5']}
             compareRate={compareRate['4_5']}
           />

@@ -1,0 +1,25 @@
+{
+    "name": "TSL",
+    "short_name": "TSL",
+    "icons": [{
+      "src": "assets/desktop.png",
+        "sizes": "128x128",
+        "type": "image/png"
+      }, {
+        "src": "assets/desktop.png",
+        "sizes": "144x144",
+        "type": "image/png"
+      }, {
+        "src": "assets/desktop.png",
+        "sizes": "152x152",
+        "type": "image/png"
+      }, {
+        "src": "assets/desktop.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }, {
+        "src": "assets/desktop.png",
+        "sizes": "256x256",
+        "type": "image/png"
+      }]
+  }
