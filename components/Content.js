@@ -6,6 +6,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { Table } from 'reactstrap';
 
+import Score from './Score';
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -14,23 +16,20 @@ const styles = theme => ({
   },
   table: {
     width: '100%',
+    textAlign: 'center',
+  },
+  toolbar: {
+    backgroundColor: 'skyblue',
   },
   title: {
     flex: '0 0 auto',
   },
-  draw: {
-    textAlign: 'center',
-  },
+  draw: {},
   desc: {
     color: 'red',
-    textAlign: 'center',
   },
   asc: {
     color: 'green',
-    textAlign: 'center',
-  },
-  time: {
-    textAlign: 'center',
   },
 });
 
@@ -46,6 +45,7 @@ const Content = props => {
   let rates_handicap = []; // 讓球
   let rates_total_over_25 = []; // 2.5 大小
   let rates_point = []; // 進球數
+  let rates_score = []; // 進球數
 
   if (gameData) {
     code = gameData.code;
@@ -57,6 +57,7 @@ const Content = props => {
     rates_handicap = gameData.rates_handicap;
     rates_total_over_25 = gameData.rates_total_over_25;
     rates_point = gameData.rates_point;
+    rates_score = gameData.rates_score;
   }
 
   // 讓球 title 顯示
@@ -83,7 +84,7 @@ const Content = props => {
         {aiName} @ {hiName}
       </h3>
       <Paper className={classes.root}>
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           <div className={classes.title}>
             <Typography variant="title" id="tableTitle">
               不讓球
@@ -145,7 +146,7 @@ const Content = props => {
       </Paper>
 
       <Paper className={classes.root}>
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           <div className={classes.title}>
             <Typography variant="title" id="tableTitle">
               讓球
@@ -207,7 +208,7 @@ const Content = props => {
       </Paper>
 
       <Paper className={classes.root}>
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           <div className={classes.title}>
             <Typography variant="title" id="tableTitle">
               2.5 大小
@@ -258,7 +259,7 @@ const Content = props => {
       </Paper>
 
       <Paper className={classes.root}>
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           <div className={classes.title}>
             <Typography variant="title" id="tableTitle">
               進球數
@@ -317,6 +318,17 @@ const Content = props => {
             })}
           </tbody>
         </Table>
+      </Paper>
+
+      <Paper className={classes.root}>
+        <Toolbar className={classes.toolbar}>
+          <div className={classes.title}>
+            <Typography variant="title" id="tableTitle">
+              正確比分
+            </Typography>
+          </div>
+        </Toolbar>
+        <Score data={rates_score} />
       </Paper>
     </div>
   );

@@ -21,6 +21,7 @@ export default class extends React.Component {
             type="image/x-icon"
             href="/static/assets/favicon.png"
           />
+          <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0"
