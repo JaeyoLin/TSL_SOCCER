@@ -973,7 +973,11 @@ const compareData = detailData => {
 
     if (isChange) {
       console.log(`${obj.code} - Rates is changed.`);
-      Line.sendMessage(`${obj.code} - Rates is changed.`);
+      Line.sendMessage(
+        `比賽日期: ${obj.date}\n賽事: ${obj.code}\n隊伍: ${obj.teams.ai} @ ${
+          obj.teams.hi
+        }\n賠率已異動。`
+      );
     }
 
     // 寫入檔案

@@ -25,10 +25,13 @@ const styles = theme => ({
     flex: '0 0 auto',
   },
   draw: {},
-  desc: {
+  down: {
     color: 'red',
   },
-  asc: {
+  up: {
+    color: 'green',
+  },
+  test: {
     color: 'green',
   },
 });
@@ -76,6 +79,39 @@ const Content = props => {
     }
   }
 
+  // 判斷上升或下降
+  const getCell = (rate, compareRate) => {
+    let returnComponent = null;
+
+    if (rate > compareRate) {
+      returnComponent = (
+        <span className={classes.up}>
+          <i class="fas fa-caret-up fa-lg">
+            {parseFloat(Math.round(rate * 100) / 100).toFixed(2)}
+          </i>
+        </span>
+      );
+    } else if (rate < compareRate) {
+      returnComponent = (
+        <span className={classes.down}>
+          <i class="fas fa-caret-down fa-lg">
+            {parseFloat(Math.round(rate * 100) / 100).toFixed(2)}
+          </i>
+        </span>
+      );
+    } else {
+      returnComponent = (
+        <span>
+          <i class="fas fa-lg">
+            {parseFloat(Math.round(rate * 100) / 100).toFixed(2)}
+          </i>
+        </span>
+      );
+    }
+
+    return returnComponent;
+  };
+
   return (
     <div>
       <h3>賽事編號 {code}</h3>
@@ -102,41 +138,21 @@ const Content = props => {
           </thead>
           <tbody>
             {rates_single.map((n, index) => {
-              let aiClass = classes.draw;
-              let drawClass = classes.draw;
-              let hiClass = classes.draw;
+              let aiCompare = n.ai;
+              let drawCompare = n.draw;
+              let hiCompare = n.hi;
 
               if (index !== 0) {
-                if (n.ai > rates_single[index - 1].ai) {
-                  aiClass = classes.asc;
-                } else if (n.ai < rates_single[index - 1].ai) {
-                  aiClass = classes.desc;
-                }
-
-                if (n.draw > rates_single[index - 1].draw) {
-                  drawClass = classes.asc;
-                } else if (n.draw < rates_single[index - 1].draw) {
-                  drawClass = classes.desc;
-                }
-
-                if (n.hi > rates_single[index - 1].hi) {
-                  hiClass = classes.asc;
-                } else if (n.hi < rates_single[index - 1].hi) {
-                  hiClass = classes.desc;
-                }
+                aiCompare = rates_single[index - 1].ai;
+                drawCompare = rates_single[index - 1].draw;
+                hiCompare = rates_single[index - 1].hi;
               }
 
               return (
                 <tr key={`rates_single_${index}`}>
-                  <td className={aiClass}>
-                    {parseFloat(Math.round(n.ai * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={drawClass}>
-                    {parseFloat(Math.round(n.draw * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={hiClass}>
-                    {parseFloat(Math.round(n.hi * 100) / 100).toFixed(2)}
-                  </td>
+                  <td>{getCell(n.ai, aiCompare)}</td>
+                  <td>{getCell(n.draw, drawCompare)}</td>
+                  <td>{getCell(n.hi, hiCompare)}</td>
                   <td className={classes.time}>{n.time}</td>
                 </tr>
               );
@@ -164,41 +180,21 @@ const Content = props => {
           </thead>
           <tbody>
             {rates_handicap.map((n, index) => {
-              let aiClass = classes.draw;
-              let drawClass = classes.draw;
-              let hiClass = classes.draw;
+              let aiCompare = n.ai;
+              let drawCompare = n.draw;
+              let hiCompare = n.hi;
 
               if (index !== 0) {
-                if (n.ai > rates_handicap[index - 1].ai) {
-                  aiClass = classes.asc;
-                } else if (n.ai < rates_handicap[index - 1].ai) {
-                  aiClass = classes.desc;
-                }
-
-                if (n.draw > rates_handicap[index - 1].draw) {
-                  drawClass = classes.asc;
-                } else if (n.draw < rates_handicap[index - 1].draw) {
-                  drawClass = classes.desc;
-                }
-
-                if (n.hi > rates_handicap[index - 1].hi) {
-                  hiClass = classes.asc;
-                } else if (n.hi < rates_handicap[index - 1].hi) {
-                  hiClass = classes.desc;
-                }
+                aiCompare = rates_handicap[index - 1].ai;
+                drawCompare = rates_handicap[index - 1].draw;
+                hiCompare = rates_handicap[index - 1].hi;
               }
 
               return (
                 <tr key={`rates_handicap_${index}`}>
-                  <td className={aiClass}>
-                    {parseFloat(Math.round(n.ai * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={drawClass}>
-                    {parseFloat(Math.round(n.draw * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={hiClass}>
-                    {parseFloat(Math.round(n.hi * 100) / 100).toFixed(2)}
-                  </td>
+                  <td>{getCell(n.ai, aiCompare)}</td>
+                  <td>{getCell(n.draw, drawCompare)}</td>
+                  <td>{getCell(n.hi, hiCompare)}</td>
                   <td className={classes.time}>{n.time}</td>
                 </tr>
               );
@@ -225,31 +221,18 @@ const Content = props => {
           </thead>
           <tbody>
             {rates_total_over_25.map((n, index) => {
-              let overClass = classes.draw;
-              let underClass = classes.draw;
+              let overCompare = n.over;
+              let underCompare = n.under;
 
               if (index !== 0) {
-                if (n.over > rates_total_over_25[index - 1].over) {
-                  overClass = classes.asc;
-                } else if (n.over < rates_total_over_25[index - 1].over) {
-                  overClass = classes.desc;
-                }
-
-                if (n.under > rates_total_over_25[index - 1].under) {
-                  underClass = classes.asc;
-                } else if (n.under < rates_total_over_25[index - 1].under) {
-                  underClass = classes.desc;
-                }
+                overCompare = rates_total_over_25[index - 1].over;
+                underCompare = rates_total_over_25[index - 1].under;
               }
 
               return (
                 <tr key={`rates_total_over_25_${index}`}>
-                  <td className={overClass}>
-                    {parseFloat(Math.round(n.over * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={underClass}>
-                    {parseFloat(Math.round(n.under * 100) / 100).toFixed(2)}
-                  </td>
+                  <td>{getCell(n.over, overCompare)}</td>
+                  <td>{getCell(n.under, underCompare)}</td>
                   <td className={classes.time}>{n.time}</td>
                 </tr>
               );
@@ -277,41 +260,21 @@ const Content = props => {
           </thead>
           <tbody>
             {rates_point.map((n, index) => {
-              let aClass = classes.draw;
-              let bClass = classes.draw;
-              let cClass = classes.draw;
+              let aCompare = n.A;
+              let bCompare = n.B;
+              let cCompare = n.C;
 
               if (index !== 0) {
-                if (n.A > rates_point[index - 1].A) {
-                  aClass = classes.asc;
-                } else if (n.A < rates_point[index - 1].A) {
-                  aClass = classes.desc;
-                }
-
-                if (n.B > rates_point[index - 1].B) {
-                  bClass = classes.asc;
-                } else if (n.B < rates_point[index - 1].B) {
-                  bClass = classes.desc;
-                }
-
-                if (n.C > rates_point[index - 1].C) {
-                  cClass = classes.asc;
-                } else if (n.C < rates_point[index - 1].C) {
-                  cClass = classes.desc;
-                }
+                aCompare = rates_point[index - 1].A;
+                bCompare = rates_point[index - 1].B;
+                cCompare = rates_point[index - 1].C;
               }
 
               return (
                 <tr key={`rates_point_${index}`}>
-                  <td className={aClass} numeric>
-                    {parseFloat(Math.round(n.A * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={bClass} numeric>
-                    {parseFloat(Math.round(n.B * 100) / 100).toFixed(2)}
-                  </td>
-                  <td className={cClass} numeric>
-                    {parseFloat(Math.round(n.C * 100) / 100).toFixed(2)}
-                  </td>
+                  <td>{getCell(n.A, aCompare)}</td>
+                  <td>{getCell(n.B, bCompare)}</td>
+                  <td>{getCell(n.C, cCompare)}</td>
                   <td className={classes.time}>{n.time}</td>
                 </tr>
               );
