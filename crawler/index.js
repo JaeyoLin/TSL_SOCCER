@@ -5,6 +5,7 @@ const moment = require('moment-timezone');
 const appRoot = require('app-root-path');
 
 const Line = require('./LineBot/Line');
+const LineNotify = require('./LineNotify/LineNotify');
 const Constant = require('./utility/Constant');
 
 // json folder
@@ -973,11 +974,14 @@ const compareData = detailData => {
 
     if (isChange) {
       console.log(`${obj.code} - Rates is changed.`);
-      Line.sendMessage(
-        `比賽日期: ${obj.date}\n賽事: ${obj.code}\n隊伍: ${obj.teams.ai} @ ${
-          obj.teams.hi
-        }\n賠率已異動。`
-      );
+
+      const message = `比賽日期: ${obj.date}\n賽事: ${obj.code}\n隊伍: ${
+        obj.teams.ai
+      } @ ${obj.teams.hi}\n賠率已異動。`;
+
+      Line.sendMessage(message);
+
+      LineNotify.send(`\n${message}`);
     }
 
     // 寫入檔案
