@@ -119,180 +119,191 @@ const Content = props => {
       <h3>
         {aiName} @ {hiName}
       </h3>
-      <Paper className={classes.root}>
-        <Toolbar className={classes.toolbar}>
-          <div className={classes.title}>
-            <Typography variant="title" id="tableTitle">
-              不讓球
-            </Typography>
-          </div>
-        </Toolbar>
-        <Table className={classes.table}>
-          <thead>
-            <tr>
-              <th>{aiName}</th>
-              <th>和局</th>
-              <th>{hiName}</th>
-              <th>更新時間</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rates_single.map((n, index) => {
-              let aiCompare = n.ai;
-              let drawCompare = n.draw;
-              let hiCompare = n.hi;
 
-              if (index !== 0) {
-                aiCompare = rates_single[index - 1].ai;
-                drawCompare = rates_single[index - 1].draw;
-                hiCompare = rates_single[index - 1].hi;
-              }
+      {rates_single.length > 0 ? (
+        <Paper className={classes.root}>
+          <Toolbar className={classes.toolbar}>
+            <div className={classes.title}>
+              <Typography variant="title" id="tableTitle">
+                不讓球
+              </Typography>
+            </div>
+          </Toolbar>
+          <Table className={classes.table}>
+            <thead>
+              <tr>
+                <th>{aiName}</th>
+                <th>和局</th>
+                <th>{hiName}</th>
+                <th>更新時間</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rates_single.map((n, index) => {
+                let aiCompare = n.ai;
+                let drawCompare = n.draw;
+                let hiCompare = n.hi;
 
-              return (
-                <tr key={`rates_single_${index}`}>
-                  <td>{getCell(n.ai, aiCompare)}</td>
-                  <td>{getCell(n.draw, drawCompare)}</td>
-                  <td>{getCell(n.hi, hiCompare)}</td>
-                  <td className={classes.time}>{n.time}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-      </Paper>
+                if (index !== 0) {
+                  aiCompare = rates_single[index - 1].ai;
+                  drawCompare = rates_single[index - 1].draw;
+                  hiCompare = rates_single[index - 1].hi;
+                }
 
-      <Paper className={classes.root}>
-        <Toolbar className={classes.toolbar}>
-          <div className={classes.title}>
-            <Typography variant="title" id="tableTitle">
-              讓球
-            </Typography>
-          </div>
-        </Toolbar>
-        <Table className={classes.table}>
-          <thead>
-            <tr>
-              <th>{aiHandicap}</th>
-              <th>和局</th>
-              <th>{hiHandicap}</th>
-              <th>更新時間</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rates_handicap.map((n, index) => {
-              let aiCompare = n.ai;
-              let drawCompare = n.draw;
-              let hiCompare = n.hi;
+                return (
+                  <tr key={`rates_single_${index}`}>
+                    <td>{getCell(n.ai, aiCompare)}</td>
+                    <td>{getCell(n.draw, drawCompare)}</td>
+                    <td>{getCell(n.hi, hiCompare)}</td>
+                    <td className={classes.time}>{n.time}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Paper>
+      ) : null}
 
-              if (index !== 0) {
-                aiCompare = rates_handicap[index - 1].ai;
-                drawCompare = rates_handicap[index - 1].draw;
-                hiCompare = rates_handicap[index - 1].hi;
-              }
+      {rates_handicap.length > 0 ? (
+        <Paper className={classes.root}>
+          <Toolbar className={classes.toolbar}>
+            <div className={classes.title}>
+              <Typography variant="title" id="tableTitle">
+                讓球
+              </Typography>
+            </div>
+          </Toolbar>
+          <Table className={classes.table}>
+            <thead>
+              <tr>
+                <th>{aiHandicap}</th>
+                <th>和局</th>
+                <th>{hiHandicap}</th>
+                <th>更新時間</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rates_handicap.map((n, index) => {
+                let aiCompare = n.ai;
+                let drawCompare = n.draw;
+                let hiCompare = n.hi;
 
-              return (
-                <tr key={`rates_handicap_${index}`}>
-                  <td>{getCell(n.ai, aiCompare)}</td>
-                  <td>{getCell(n.draw, drawCompare)}</td>
-                  <td>{getCell(n.hi, hiCompare)}</td>
-                  <td className={classes.time}>{n.time}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-      </Paper>
+                if (index !== 0) {
+                  aiCompare = rates_handicap[index - 1].ai;
+                  drawCompare = rates_handicap[index - 1].draw;
+                  hiCompare = rates_handicap[index - 1].hi;
+                }
 
-      <Paper className={classes.root}>
-        <Toolbar className={classes.toolbar}>
-          <div className={classes.title}>
-            <Typography variant="title" id="tableTitle">
-              2.5 大小
-            </Typography>
-          </div>
-        </Toolbar>
-        <Table className={classes.table}>
-          <thead>
-            <tr>
-              <th>大</th>
-              <th>小</th>
-              <th>更新時間</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rates_total_over_25.map((n, index) => {
-              let overCompare = n.over;
-              let underCompare = n.under;
+                return (
+                  <tr key={`rates_handicap_${index}`}>
+                    <td>{getCell(n.ai, aiCompare)}</td>
+                    <td>{getCell(n.draw, drawCompare)}</td>
+                    <td>{getCell(n.hi, hiCompare)}</td>
+                    <td className={classes.time}>{n.time}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Paper>
+      ) : null}
 
-              if (index !== 0) {
-                overCompare = rates_total_over_25[index - 1].over;
-                underCompare = rates_total_over_25[index - 1].under;
-              }
+      {rates_total_over_25.length > 0 ? (
+        <Paper className={classes.root}>
+          <Toolbar className={classes.toolbar}>
+            <div className={classes.title}>
+              <Typography variant="title" id="tableTitle">
+                2.5 大小
+              </Typography>
+            </div>
+          </Toolbar>
+          <Table className={classes.table}>
+            <thead>
+              <tr>
+                <th>大</th>
+                <th>小</th>
+                <th>更新時間</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rates_total_over_25.map((n, index) => {
+                let overCompare = n.over;
+                let underCompare = n.under;
 
-              return (
-                <tr key={`rates_total_over_25_${index}`}>
-                  <td>{getCell(n.over, overCompare)}</td>
-                  <td>{getCell(n.under, underCompare)}</td>
-                  <td className={classes.time}>{n.time}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-      </Paper>
+                if (index !== 0) {
+                  overCompare = rates_total_over_25[index - 1].over;
+                  underCompare = rates_total_over_25[index - 1].under;
+                }
 
-      <Paper className={classes.root}>
-        <Toolbar className={classes.toolbar}>
-          <div className={classes.title}>
-            <Typography variant="title" id="tableTitle">
-              進球數
-            </Typography>
-          </div>
-        </Toolbar>
-        <Table className={classes.table}>
-          <thead>
-            <tr>
-              <th>0 - 1</th>
-              <th>2 - 3</th>
-              <th>4 +</th>
-              <th>更新時間</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rates_point.map((n, index) => {
-              let aCompare = n.A;
-              let bCompare = n.B;
-              let cCompare = n.C;
+                return (
+                  <tr key={`rates_total_over_25_${index}`}>
+                    <td>{getCell(n.over, overCompare)}</td>
+                    <td>{getCell(n.under, underCompare)}</td>
+                    <td className={classes.time}>{n.time}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Paper>
+      ) : null}
 
-              if (index !== 0) {
-                aCompare = rates_point[index - 1].A;
-                bCompare = rates_point[index - 1].B;
-                cCompare = rates_point[index - 1].C;
-              }
+      {rates_point.length > 0 ? (
+        <Paper className={classes.root}>
+          <Toolbar className={classes.toolbar}>
+            <div className={classes.title}>
+              <Typography variant="title" id="tableTitle">
+                進球數
+              </Typography>
+            </div>
+          </Toolbar>
+          <Table className={classes.table}>
+            <thead>
+              <tr>
+                <th>0 - 1</th>
+                <th>2 - 3</th>
+                <th>4 +</th>
+                <th>更新時間</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rates_point.map((n, index) => {
+                let aCompare = n.A;
+                let bCompare = n.B;
+                let cCompare = n.C;
 
-              return (
-                <tr key={`rates_point_${index}`}>
-                  <td>{getCell(n.A, aCompare)}</td>
-                  <td>{getCell(n.B, bCompare)}</td>
-                  <td>{getCell(n.C, cCompare)}</td>
-                  <td className={classes.time}>{n.time}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-      </Paper>
+                if (index !== 0) {
+                  aCompare = rates_point[index - 1].A;
+                  bCompare = rates_point[index - 1].B;
+                  cCompare = rates_point[index - 1].C;
+                }
 
-      <Paper className={classes.root}>
-        <Toolbar className={classes.toolbar}>
-          <div className={classes.title}>
-            <Typography variant="title" id="tableTitle">
-              正確比分
-            </Typography>
-          </div>
-        </Toolbar>
-        <Score data={rates_score} />
-      </Paper>
+                return (
+                  <tr key={`rates_point_${index}`}>
+                    <td>{getCell(n.A, aCompare)}</td>
+                    <td>{getCell(n.B, bCompare)}</td>
+                    <td>{getCell(n.C, cCompare)}</td>
+                    <td className={classes.time}>{n.time}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Paper>
+      ) : null}
+
+      {rates_score.length > 0 ? (
+        <Paper className={classes.root}>
+          <Toolbar className={classes.toolbar}>
+            <div className={classes.title}>
+              <Typography variant="title" id="tableTitle">
+                正確比分
+              </Typography>
+            </div>
+          </Toolbar>
+          <Score data={rates_score} />
+        </Paper>
+      ) : null}
     </div>
   );
 };

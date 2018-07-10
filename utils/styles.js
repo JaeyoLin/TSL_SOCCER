@@ -27,10 +27,13 @@ const styles = theme => ({
   avatar: {
     right: '10px',
     position: 'absolute',
+    color: '#fff',
+    backgroundColor: 'cadetblue',
   },
   drawerPaper: {
     position: 'relative',
     width: drawerWidth,
+    height: '100%',
   },
   drawerHeader: {
     display: 'flex',
@@ -38,6 +41,12 @@ const styles = theme => ({
     justifyContent: 'flex-end',
     padding: '0 8px',
     ...theme.mixins.toolbar,
+  },
+  drawDateTime: {
+    textAlign: 'center',
+    backgroundColor: 'darkgray',
+    paddingTop: '10px',
+    paddingBottom: '10px',
   },
   content: {
     flexGrow: 1,

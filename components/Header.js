@@ -5,6 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import Refresh from '@material-ui/icons/Refresh';
 import MenuIcon from '@material-ui/icons/Menu';
 import Avatar from '@material-ui/core/Avatar';
 import styles from '../utils/styles';
@@ -36,13 +37,13 @@ const Header = props => {
           TSL SOCCER
         </Typography>
         <Avatar
-          alt="Remy Sharp"
-          src="/static/assets/test.jpg"
           className={classes.avatar}
           onClick={() => {
             testModal();
           }}
-        />
+        >
+          <Refresh />
+        </Avatar>
       </Toolbar>
     </AppBar>
   );

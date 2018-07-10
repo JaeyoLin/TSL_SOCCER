@@ -14,9 +14,29 @@ import styles from '../utils/styles';
 const Header = props => {
   const { classes, data, open, handleDrawerClose } = props;
   const listItems = [];
+
   if (data) {
+    let tmpDate = null;
+
     data.forEach(item => {
       const title = `${item.code} - ${item.teams.ai} @ ${item.teams.hi}`;
+
+      if (!tmpDate) {
+        tmpDate = item.date; // 這次日期時間
+        listItems.push(<Divider />);
+        listItems.push(
+          <ListItemText primary={tmpDate} className={classes.drawDateTime} />
+        );
+        listItems.push(<Divider />);
+      } else if (tmpDate !== item.date) {
+        tmpDate = item.date; // 新的日期時間
+        listItems.push(<Divider />);
+        listItems.push(
+          <ListItemText primary={tmpDate} className={classes.drawDateTime} />
+        );
+        listItems.push(<Divider />);
+      }
+
       listItems.push(
         <ListItem
           key={item.code}
