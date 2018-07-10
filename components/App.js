@@ -25,9 +25,9 @@ class App extends React.Component {
    * componentDidMount
    */
   componentDidMount() {
-    Router.push(`/soccer`, `/soccer?gameCode=${this.state.gameCode}`, {
-      shallow: true,
-    });
+    // Router.push(`/soccer`, `/soccer?gameCode=${this.state.gameCode}`, {
+    //   shallow: true,
+    // });
   }
 
   /**
