@@ -45,7 +45,7 @@ export default class extends React.Component {
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="black" />
           <meta name="apple-mobile-web-app-title" content="TSL" />
-          <link rel="apple-touch-icon" href="/static/assets/desktop.png" />
+          <link rel="apple-touch-icon" href="/static/assets/play.ico" />
           <link rel="manifest" href="/static/manifest.json" />
         </Head>
         <App gameCode={this.props.gameCode} data={this.props.data} />
