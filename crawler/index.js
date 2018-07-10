@@ -8,6 +8,8 @@ const Line = require('./LineBot/Line');
 const LineNotify = require('./LineNotify/LineNotify');
 const Constant = require('./utility/Constant');
 
+const APP_URL = 'http://220.134.223.104:8000/soccer';
+
 // json folder
 const folderPath = `${appRoot}/json`;
 
@@ -977,7 +979,7 @@ const compareData = detailData => {
 
       const message = `比賽日期: ${obj.date}\n賽事: ${obj.code}\n隊伍: ${
         obj.teams.ai
-      } @ ${obj.teams.hi}\n賠率已異動。`;
+      } @ ${obj.teams.hi}\n賠率已異動。\n${APP_URL}`;
 
       Line.sendMessage(message);
 
