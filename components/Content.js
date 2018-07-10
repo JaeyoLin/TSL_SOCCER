@@ -86,7 +86,7 @@ const Content = props => {
     if (rate > compareRate) {
       returnComponent = (
         <span className={classes.up}>
-          <i class="fas fa-caret-up fa-lg">
+          <i class="fas fa-caret-up fa-1g">
             {parseFloat(Math.round(rate * 100) / 100).toFixed(2)}
           </i>
         </span>
@@ -94,7 +94,7 @@ const Content = props => {
     } else if (rate < compareRate) {
       returnComponent = (
         <span className={classes.down}>
-          <i class="fas fa-caret-down fa-lg">
+          <i class="fas fa-caret-down fa-1g">
             {parseFloat(Math.round(rate * 100) / 100).toFixed(2)}
           </i>
         </span>
@@ -102,7 +102,7 @@ const Content = props => {
     } else {
       returnComponent = (
         <span>
-          <i class="fas fa-lg">
+          <i class="fas fa-1g">
             {parseFloat(Math.round(rate * 100) / 100).toFixed(2)}
           </i>
         </span>
@@ -297,7 +297,7 @@ const Content = props => {
           <Toolbar className={classes.toolbar}>
             <div className={classes.title}>
               <Typography variant="title" id="tableTitle">
-                正確比分
+                正確比分 ({rates_score[rates_score.length - 1].time})
               </Typography>
             </div>
           </Toolbar>

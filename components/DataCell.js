@@ -24,7 +24,7 @@ const DataCell = props => {
   if (rate > compareRate) {
     returnComponent = (
       <span className={classes.up}>
-        <i class="fas fa-caret-up fa-lg">
+        <i class="fas fa-caret-up fa-1g">
           {parseFloat(Math.round(rate * 100) / 100).toFixed(2)}
         </i>
       </span>
@@ -32,7 +32,7 @@ const DataCell = props => {
   } else if (rate < compareRate) {
     returnComponent = (
       <span className={classes.down}>
-        <i class="fas fa-caret-down fa-lg">
+        <i class="fas fa-caret-down fa-1g">
           {parseFloat(Math.round(rate * 100) / 100).toFixed(2)}
         </i>
       </span>
@@ -40,7 +40,7 @@ const DataCell = props => {
   } else {
     returnComponent = (
       <span>
-        <i class="fas fa-lg">
+        <i class="fas fa-1g">
           {parseFloat(Math.round(rate * 100) / 100).toFixed(2)}
         </i>
       </span>
