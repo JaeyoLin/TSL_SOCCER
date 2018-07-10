@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
+import Router from 'next/router';
 
 import Header from './Header';
 import Menu from './Menu';
@@ -14,19 +15,19 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    let gameCode = null;
-    if (
-      this.props.data &&
-      this.props.data.length > 0 &&
-      this.props.data[0].code
-    ) {
-      gameCode = this.props.data[0].code;
-    }
-
     this.state = {
       open: false,
-      gameCode,
+      gameCode: this.props.gameCode,
     };
+  }
+
+  /**
+   * componentDidMount
+   */
+  componentDidMount() {
+    Router.push(`/soccer`, `/soccer?gameCode=${this.state.gameCode}`, {
+      shallow: true,
+    });
   }
 
   /**
@@ -34,6 +35,8 @@ class App extends React.Component {
    *
    */
   handleSelectGame = gameCode => {
+    Router.push(`/soccer`, `/soccer?gameCode=${gameCode}`, { shallow: true });
+
     this.setState({
       gameCode,
       open: false,
@@ -67,7 +70,9 @@ class App extends React.Component {
       },
     };
     if (data && data.length) {
-      gameData = data.filter(item => item.code === this.state.gameCode);
+      gameData = data.filter(item => {
+        return item.code === this.state.gameCode;
+      });
     }
 
     return (

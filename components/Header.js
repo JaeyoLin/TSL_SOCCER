@@ -14,8 +14,8 @@ import classNames from 'classnames';
 const Header = props => {
   const { classes, open, handleDrawerOpen } = props;
 
-  const testModal = () => {
-    alert('~~呆呆領域~~');
+  const reflesh = () => {
+    location.reload();
   };
 
   return (
@@ -39,7 +39,7 @@ const Header = props => {
         <Avatar
           className={classes.avatar}
           onClick={() => {
-            testModal();
+            reflesh();
           }}
         >
           <Refresh />

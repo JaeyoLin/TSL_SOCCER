@@ -6,9 +6,20 @@ import App from '../components/App';
 import getMenus from '../api/getMenus';
 
 export default class extends React.Component {
-  static async getInitialProps() {
+  static async getInitialProps(context) {
     const json = await getMenus();
-    return { data: json.data };
+
+    let gameCode = null;
+    if (context && context.query && context.query.gameCode) {
+      gameCode = context.query.gameCode * 1;
+    } else {
+      gameCode = json.data[0].code;
+    }
+
+    return {
+      gameCode,
+      data: json.data,
+    };
   }
 
   render() {
@@ -36,7 +47,7 @@ export default class extends React.Component {
           <link rel="apple-touch-icon" href="/static/assets/desktop.png" />
           <link rel="manifest" href="/static/manifest.json" />
         </Head>
-        <App data={this.props.data} />
+        <App gameCode={this.props.gameCode} data={this.props.data} />
       </div>
     );
   }
