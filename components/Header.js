@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Refresh from '@material-ui/icons/Refresh';
 import MenuIcon from '@material-ui/icons/Menu';
-import Avatar from '@material-ui/core/Avatar';
 import styles from '../utils/styles';
 import classNames from 'classnames';
 
@@ -36,14 +35,16 @@ const Header = props => {
         <Typography variant="title" color="inherit" noWrap>
           TSL SOCCER
         </Typography>
-        <Avatar
+
+        <IconButton
+          color="inherit"
           className={classes.avatar}
           onClick={() => {
             reflesh();
           }}
         >
           <Refresh />
-        </Avatar>
+        </IconButton>
       </Toolbar>
     </AppBar>
   );

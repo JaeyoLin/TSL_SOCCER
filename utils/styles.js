@@ -25,9 +25,8 @@ const styles = theme => ({
     }),
   },
   avatar: {
-    right: '10px',
+    right: '12px',
     position: 'absolute',
-    color: '#fff',
     backgroundColor: 'cadetblue',
   },
   drawerPaper: {
@@ -68,8 +67,8 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
   menuButton: {
-    marginLeft: 12,
-    marginRight: 20,
+    marginLeft: 0,
+    marginRight: 10,
   },
   hide: {
     display: 'none',
