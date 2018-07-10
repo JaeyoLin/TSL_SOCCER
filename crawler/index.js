@@ -979,7 +979,7 @@ const compareData = detailData => {
 
       const message = `比賽日期: ${obj.date}\n賽事: ${obj.code}\n隊伍: ${
         obj.teams.ai
-      } @ ${obj.teams.hi}\n賠率已異動。\n${APP_URL}`;
+        } @ ${obj.teams.hi}\n賠率已異動。\n${APP_URL}?gameCode=${obj.code}`;
 
       Line.sendMessage(message);
 
@@ -1091,7 +1091,7 @@ const rateCrawler = async () => {
   }
 };
 
-String.prototype.format = function() {
+String.prototype.format = function () {
   a = this;
   for (k in arguments) {
     a = a.replace('{' + k + '}', arguments[k]);
