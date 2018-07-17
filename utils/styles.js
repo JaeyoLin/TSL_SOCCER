@@ -3,26 +3,24 @@ const drawerWidth = 300;
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    height: '100%',
     zIndex: 1,
     overflow: 'hidden',
     position: 'relative',
     display: 'flex',
+    width: '100%',
   },
   appBar: {
     position: 'absolute',
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
+    marginLeft: drawerWidth,
     background: 'cadetblue',
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+    },
   },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+  navIconHide: {
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
   },
   avatar: {
     right: '12px',
@@ -30,9 +28,11 @@ const styles = theme => ({
     backgroundColor: 'cadetblue',
   },
   drawerPaper: {
-    position: 'relative',
     width: drawerWidth,
     height: '100%',
+    [theme.breakpoints.up('md')]: {
+      position: 'relative',
+    },
   },
   drawerHeader: {
     display: 'flex',
@@ -51,19 +51,6 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 1,
-    minWidth: 0,
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
   },
   toolbar: theme.mixins.toolbar,
   menuButton: {

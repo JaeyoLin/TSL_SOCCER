@@ -129,7 +129,7 @@ const Content = props => {
       <Container>
         <Row>
           {mins ? (
-            <Col xs="12" sm="3">
+            <Col xs="12" sm="6">
               <ListItem>
                 <Avatar>
                   <CasinoIcon />
@@ -139,7 +139,7 @@ const Content = props => {
             </Col>
           ) : null}
 
-          <Col xs="12" sm="3">
+          <Col xs="12" sm="6">
             <ListItem>
               <Avatar>
                 <PollIcon />
@@ -147,7 +147,7 @@ const Content = props => {
               <ListItemText primary="賽事編號" secondary={code} />
             </ListItem>
           </Col>
-          <Col xs="12" sm="3">
+          <Col xs="12" sm="6">
             <ListItem>
               <Avatar>
                 <DateRangeIcon />
@@ -155,7 +155,7 @@ const Content = props => {
               <ListItemText primary="比賽日期" secondary={date} />
             </ListItem>
           </Col>
-          <Col xs="12" sm="3">
+          <Col xs="12" sm="6">
             <ListItem>
               <Avatar>
                 <GroupIcon />

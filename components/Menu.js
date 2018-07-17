@@ -12,10 +12,12 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Looks1Icon from '@material-ui/icons/LooksOne';
 import Looks2Icon from '@material-ui/icons/LooksTwo';
 import Looks3Icon from '@material-ui/icons/Looks3';
+import Hidden from '@material-ui/core/Hidden';
+
 import styles from '../utils/styles';
 
 const Header = props => {
-  const { classes, data, open, handleDrawerClose } = props;
+  const { classes, theme, data, open, handleDrawerClose } = props;
   const listItems = [];
 
   if (data) {
@@ -71,31 +73,58 @@ const Header = props => {
     });
   }
 
-  return (
-    <Drawer
-      open={open}
-      variant="persistent"
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-    >
+  const drawer = (
+    <div>
       <div className={classes.drawerHeader}>
-        <IconButton onClick={handleDrawerClose}>
+        <IconButton onClick={handleDrawerClose} className={classes.navIconHide}>
           <ChevronLeftIcon />
         </IconButton>
       </div>
       <Divider />
       <List>{listItems}</List>
-    </Drawer>
+    </div>
+  );
+
+  return (
+    <div>
+      <Hidden mdUp>
+        <Drawer
+          variant="temporary"
+          anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+          open={open}
+          onClose={handleDrawerClose}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Hidden>
+      <Hidden smDown implementation="css">
+        <Drawer
+          variant="permanent"
+          open
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Hidden>
+    </div>
   );
 };
 
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
   data: PropTypes.array.isRequired,
   selectGame: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   handleDrawerClose: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(Header);
+export default withStyles(styles, { withTheme: true })(Header);
