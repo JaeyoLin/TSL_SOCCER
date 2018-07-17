@@ -889,6 +889,17 @@ const saveFile = (fileName, json) => {
 };
 
 /**
+ * sendMessage
+ * 發送 line 通知
+ *
+ * @param {string} message
+ */
+const sendMessage = message => {
+  Line.sendMessage(message);
+  LineNotify.send(`\n${message}`);
+};
+
+/**
  * compareData
  * 比較賠率及更新檔案
  *
@@ -907,10 +918,12 @@ const compareData = detailData => {
   let obj = {
     code: '', // 賽事編號
     date: '', // 比賽日期時間
+    league: '', // 聯賽名稱
     teams: {
       hi: '', // 主隊名稱
       ai: '', // 客隊名稱
     },
+    mins: 0, // 過關數
     rates_single: [], // 不讓球
     rates_handicap: [], // 讓球
     rates_total_over_25: [], // 2.5 大小
@@ -979,11 +992,9 @@ const compareData = detailData => {
 
       const message = `比賽日期: ${obj.date}\n賽事: ${obj.code}\n隊伍: ${
         obj.teams.ai
-        } @ ${obj.teams.hi}\n賠率已異動。\n${APP_URL}?gameCode=${obj.code}`;
+      } @ ${obj.teams.hi}\n賠率已異動。\n${APP_URL}?gameCode=${obj.code}`;
 
-      Line.sendMessage(message);
-
-      LineNotify.send(`\n${message}`);
+      sendMessage(message);
     }
 
     // 寫入檔案
@@ -995,6 +1006,9 @@ const compareData = detailData => {
     // 日期
     const gameTime = moment.tz(detailData.kdt, 'Asia/Taipei');
     obj.date = gameTime.format('YYYY-MM-DD HH:mm');
+
+    // 聯賽名稱
+    obj.league = detailData.lexicon.resources[detailData.ti];
 
     // 隊伍名稱
     obj.teams.hi = detailData.lexicon.resources[detailData.hi];
@@ -1011,6 +1025,9 @@ const compareData = detailData => {
         if (tmp) {
           obj.rates_single.push(tmp);
         }
+
+        // 過關數
+        obj.mins = detail.mins;
       } else if (detail.g === Constant.GAME_TYPE.HANDICAP.g) {
         // 讓球
         // 取得讓球主客合賠率
@@ -1044,6 +1061,21 @@ const compareData = detailData => {
         }
       }
     });
+
+    // 檢查 2-3 球賠率是否在 1.85
+    if (obj.rates_point && obj.rates_point.length > 0) {
+      const tmpRate = obj.rates_point[obj.rates_point.length - 1].B;
+
+      if (tmpRate >= 1.85 && tmpRate <= 1.9 && obj.mins === 1) {
+        const message = `比賽日期: ${obj.date}\n賽事: ${obj.code}\n隊伍: ${
+          obj.teams.ai
+        } @ ${
+          obj.teams.hi
+        }\n單場 2-3 球賠率落在 1.85 ~ 1.9。\n${APP_URL}?gameCode=${obj.code}`;
+
+        sendMessage(message);
+      }
+    }
 
     // 寫入檔案
     saveFile(fileName, JSON.stringify(obj));
@@ -1091,7 +1123,7 @@ const rateCrawler = async () => {
   }
 };
 
-String.prototype.format = function () {
+String.prototype.format = function() {
   a = this;
   for (k in arguments) {
     a = a.replace('{' + k + '}', arguments[k]);

@@ -18,22 +18,18 @@ const Header = props => {
   };
 
   return (
-    <AppBar
-      className={classNames(classes.appBar, {
-        [classes.appBarShift]: open,
-      })}
-    >
+    <AppBar className={classes.appBar}>
       <Toolbar>
         <IconButton
           color="inherit"
           aria-label="open drawer"
           onClick={handleDrawerOpen}
-          className={classNames(classes.menuButton, open && classes.hide)}
+          className={classes.navIconHide}
         >
           <MenuIcon />
         </IconButton>
         <Typography variant="title" color="inherit" noWrap>
-          TSL SOCCER
+          Soccer
         </Typography>
 
         <IconButton

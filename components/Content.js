@@ -6,6 +6,16 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { Table } from 'reactstrap';
 
+// import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import DateRangeIcon from '@material-ui/icons/DateRange';
+import PollIcon from '@material-ui/icons/Poll';
+import GroupIcon from '@material-ui/icons/Group';
+import CasinoIcon from '@material-ui/icons/Casino';
+import { Container, Row, Col } from 'reactstrap';
+
 import Score from './Score';
 
 const styles = theme => ({
@@ -43,6 +53,7 @@ const Content = props => {
   let date = '';
   let aiName = '';
   let hiName = '';
+  let mins = null;
 
   let rates_single = []; // 不讓球
   let rates_handicap = []; // 讓球
@@ -55,6 +66,7 @@ const Content = props => {
     date = gameData.date;
     aiName = gameData.teams.ai;
     hiName = gameData.teams.hi;
+    mins = gameData.mins;
 
     rates_single = gameData.rates_single;
     rates_handicap = gameData.rates_handicap;
@@ -71,11 +83,11 @@ const Content = props => {
     const v1 = rates_handicap[0].v1;
 
     if (v1 === -1) {
-      aiHandicap = `${aiHandicap} (+1)`;
-      hiHandicap = `${hiHandicap} (-1)`;
+      aiHandicap = `(+1)`;
+      hiHandicap = `(-1)`;
     } else {
-      aiHandicap = `${aiHandicap} (-1)`;
-      hiHandicap = `${hiHandicap} (+1)`;
+      aiHandicap = `(-1)`;
+      hiHandicap = `(+1)`;
     }
   }
 
@@ -114,11 +126,48 @@ const Content = props => {
 
   return (
     <div>
-      <h3>賽事編號 {code}</h3>
-      <h3>日期 {date}</h3>
-      <h3>
-        {aiName} @ {hiName}
-      </h3>
+      <Container>
+        <Row>
+          {mins ? (
+            <Col xs="12" sm="6">
+              <ListItem>
+                <Avatar>
+                  <CasinoIcon />
+                </Avatar>
+                <ListItemText primary="過關數量" secondary={mins} />
+              </ListItem>
+            </Col>
+          ) : null}
+
+          <Col xs="12" sm="6">
+            <ListItem>
+              <Avatar>
+                <PollIcon />
+              </Avatar>
+              <ListItemText primary="賽事編號" secondary={code} />
+            </ListItem>
+          </Col>
+          <Col xs="12" sm="6">
+            <ListItem>
+              <Avatar>
+                <DateRangeIcon />
+              </Avatar>
+              <ListItemText primary="比賽日期" secondary={date} />
+            </ListItem>
+          </Col>
+          <Col xs="12" sm="6">
+            <ListItem>
+              <Avatar>
+                <GroupIcon />
+              </Avatar>
+              <ListItemText
+                primary="比賽隊伍"
+                secondary={`${aiName} @ ${hiName}`}
+              />
+            </ListItem>
+          </Col>
+        </Row>
+      </Container>
 
       {rates_single.length > 0 ? (
         <Paper className={classes.root}>
@@ -176,9 +225,17 @@ const Content = props => {
           <Table className={classes.table}>
             <thead>
               <tr>
-                <th>{aiHandicap}</th>
+                <th>
+                  {aiName}
+                  <br />
+                  {aiHandicap}
+                </th>
                 <th>和局</th>
-                <th>{hiHandicap}</th>
+                <th>
+                  {hiName}
+                  <br />
+                  {hiHandicap}
+                </th>
                 <th>更新時間</th>
               </tr>
             </thead>
