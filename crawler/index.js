@@ -889,6 +889,17 @@ const saveFile = (fileName, json) => {
 };
 
 /**
+ * sendMessage
+ * 發送 line 通知
+ *
+ * @param {string} message
+ */
+const sendMessage = message => {
+  Line.sendMessage(message);
+  // LineNotify.send(`\n${message}`);
+};
+
+/**
  * compareData
  * 比較賠率及更新檔案
  *
@@ -983,9 +994,7 @@ const compareData = detailData => {
         obj.teams.ai
       } @ ${obj.teams.hi}\n賠率已異動。\n${APP_URL}?gameCode=${obj.code}`;
 
-      Line.sendMessage(message);
-
-      LineNotify.send(`\n${message}`);
+      sendMessage(message);
     }
 
     // 寫入檔案
@@ -1052,6 +1061,21 @@ const compareData = detailData => {
         }
       }
     });
+
+    // 檢查 2-3 球賠率是否在 1.85
+    if (obj.rates_point && obj.rates_point.length > 0) {
+      const tmpRate = obj.rates_point[obj.rates_point.length - 1].B;
+
+      if (tmpRate >= 1.85 && tmpRate <= 1.9 && obj.mins === 1) {
+        const message = `比賽日期: ${obj.date}\n賽事: ${obj.code}\n隊伍: ${
+          obj.teams.ai
+        } @ ${
+          obj.teams.hi
+        }\n單場 2-3 球賠率落在 1.85 ~ 1.9。\n${APP_URL}?gameCode=${obj.code}`;
+
+        sendMessage(message);
+      }
+    }
 
     // 寫入檔案
     saveFile(fileName, JSON.stringify(obj));
