@@ -911,6 +911,7 @@ const compareData = detailData => {
       hi: '', // 主隊名稱
       ai: '', // 客隊名稱
     },
+    mins: 0, // 過關數
     rates_single: [], // 不讓球
     rates_handicap: [], // 讓球
     rates_total_over_25: [], // 2.5 大小
@@ -979,7 +980,7 @@ const compareData = detailData => {
 
       const message = `比賽日期: ${obj.date}\n賽事: ${obj.code}\n隊伍: ${
         obj.teams.ai
-        } @ ${obj.teams.hi}\n賠率已異動。\n${APP_URL}?gameCode=${obj.code}`;
+      } @ ${obj.teams.hi}\n賠率已異動。\n${APP_URL}?gameCode=${obj.code}`;
 
       Line.sendMessage(message);
 
@@ -1011,6 +1012,9 @@ const compareData = detailData => {
         if (tmp) {
           obj.rates_single.push(tmp);
         }
+
+        // 過關數
+        obj.mins = detail.mins;
       } else if (detail.g === Constant.GAME_TYPE.HANDICAP.g) {
         // 讓球
         // 取得讓球主客合賠率
@@ -1091,7 +1095,7 @@ const rateCrawler = async () => {
   }
 };
 
-String.prototype.format = function () {
+String.prototype.format = function() {
   a = this;
   for (k in arguments) {
     a = a.replace('{' + k + '}', arguments[k]);

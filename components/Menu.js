@@ -7,7 +7,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
+import Avatar from '@material-ui/core/Avatar';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Looks1Icon from '@material-ui/icons/LooksOne';
+import Looks2Icon from '@material-ui/icons/LooksTwo';
+import Looks3Icon from '@material-ui/icons/Looks3';
 import styles from '../utils/styles';
 
 const Header = props => {
@@ -36,6 +40,19 @@ const Header = props => {
         listItems.push(<Divider />);
       }
 
+      let minsComponent = null;
+      switch (item.mins) {
+        case 1:
+          minsComponent = <Looks1Icon />;
+          break;
+        case 2:
+          minsComponent = <Looks2Icon />;
+          break;
+        case 3:
+          minsComponent = <Looks3Icon />;
+          break;
+      }
+
       listItems.push(
         <ListItem
           key={item.code}
@@ -44,7 +61,11 @@ const Header = props => {
           }}
           button
         >
-          <ListItemText primary={title} />
+          <Avatar>{minsComponent}</Avatar>
+          <ListItemText
+            primary={`${item.code}`}
+            secondary={`${item.teams.ai} @ ${item.teams.hi}`}
+          />
         </ListItem>
       );
     });
