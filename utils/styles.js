@@ -1,4 +1,4 @@
-const drawerWidth = 300;
+const drawerWidth = 280;
 
 const styles = theme => ({
   root: {
@@ -37,8 +37,12 @@ const styles = theme => ({
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
+    [theme.breakpoints.up('md')]: {
+      height: '64px',
+    },
+    [theme.breakpoints.down('md')]: {
+      height: '56px',
+    },
     ...theme.mixins.toolbar,
   },
   drawDateTime: {

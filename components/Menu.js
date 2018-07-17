@@ -77,9 +77,12 @@ const Header = props => {
   const drawer = (
     <div>
       <div className={classes.drawerHeader}>
-        <IconButton onClick={handleDrawerClose} className={classes.navIconHide}>
-          <ChevronLeftIcon />
-        </IconButton>
+        <List>
+          <ListItem>
+            <Avatar />
+            <ListItemText primary="TSL" secondary="v1.0.0" />
+          </ListItem>
+        </List>
       </div>
       <Divider />
       <List>{listItems}</List>

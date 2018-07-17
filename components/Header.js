@@ -29,7 +29,7 @@ const Header = props => {
           <MenuIcon />
         </IconButton>
         <Typography variant="title" color="inherit" noWrap>
-          TSL SOCCER
+          Soccer
         </Typography>
 
         <IconButton
