@@ -35,6 +35,10 @@ class App extends React.Component {
    *
    */
   handleSelectGame = gameCode => {
+    // 回到最上面
+    window.document.body.scrollTop = 0;
+    window.document.documentElement.scrollTop = 0;
+
     Router.push(`/soccer`, `/soccer?gameCode=${gameCode}`, { shallow: true });
 
     this.setState({
