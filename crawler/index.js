@@ -907,6 +907,7 @@ const compareData = detailData => {
   let obj = {
     code: '', // 賽事編號
     date: '', // 比賽日期時間
+    league: '', // 聯賽名稱
     teams: {
       hi: '', // 主隊名稱
       ai: '', // 客隊名稱
@@ -996,6 +997,9 @@ const compareData = detailData => {
     // 日期
     const gameTime = moment.tz(detailData.kdt, 'Asia/Taipei');
     obj.date = gameTime.format('YYYY-MM-DD HH:mm');
+
+    // 聯賽名稱
+    obj.league = detailData.lexicon.resources[detailData.ti];
 
     // 隊伍名稱
     obj.teams.hi = detailData.lexicon.resources[detailData.hi];

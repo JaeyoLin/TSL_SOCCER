@@ -63,7 +63,7 @@ const Header = props => {
         >
           <Avatar>{minsComponent}</Avatar>
           <ListItemText
-            primary={`${item.code}`}
+            primary={`${item.code} - ${item.league}`}
             secondary={`${item.teams.ai} @ ${item.teams.hi}`}
           />
         </ListItem>
