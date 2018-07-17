@@ -896,7 +896,7 @@ const saveFile = (fileName, json) => {
  */
 const sendMessage = message => {
   Line.sendMessage(message);
-  // LineNotify.send(`\n${message}`);
+  LineNotify.send(`\n${message}`);
 };
 
 /**
