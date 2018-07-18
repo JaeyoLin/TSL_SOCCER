@@ -33,8 +33,10 @@ const getMenus = () => {
             });
           }
 
-          // 依照日期排序
-          menus.sort((a, b) => new Date(a.date) - new Date(b.date));
+          // 依照日期、編號排序
+          menus.sort(
+            (a, b) => new Date(a.date) - new Date(b.date) || a.code - b.code
+          );
 
           // 開賽後兩個小時就不顯示
           menus = menus.filter(a => {

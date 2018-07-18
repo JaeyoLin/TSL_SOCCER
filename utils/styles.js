@@ -54,9 +54,12 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 1,
+    padding: theme.spacing.unit * 2,
   },
   toolbar: theme.mixins.toolbar,
+  selectMenu: {
+    backgroundColor: 'lightcoral',
+  },
   menuButton: {
     marginLeft: 0,
     marginRight: 10,

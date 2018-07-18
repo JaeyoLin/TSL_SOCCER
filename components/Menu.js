@@ -18,7 +18,7 @@ import Hidden from '@material-ui/core/Hidden';
 import styles from '../utils/styles';
 
 const Header = props => {
-  const { classes, theme, data, open, handleDrawerClose } = props;
+  const { classes, theme, data, gameCode, open, handleDrawerClose } = props;
   const listItems = [];
 
   if (data) {
@@ -56,6 +56,11 @@ const Header = props => {
           break;
       }
 
+      let className = null;
+      if (gameCode === item.code) {
+        className = classes.selectMenu;
+      }
+
       listItems.push(
         <ListItem
           key={item.code}
@@ -63,6 +68,7 @@ const Header = props => {
             props.selectGame(item.code);
           }}
           button
+          className={className}
         >
           <Avatar>{minsComponent}</Avatar>
           <ListItemText

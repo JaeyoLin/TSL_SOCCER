@@ -88,6 +88,7 @@ class App extends React.Component {
         <Menu
           open={this.state.open}
           data={data}
+          gameCode={this.state.gameCode}
           selectGame={this.handleSelectGame}
           handleDrawerClose={this.handleDrawerClose}
         />
