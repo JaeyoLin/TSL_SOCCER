@@ -1,6 +1,0 @@
-pages:
-  stage: deploy
-  script:
-    - dir
-  only:
-    - master
