@@ -1,14 +1,17 @@
 const fs = require('fs');
 const schedule = require('node-schedule');
-const request = require('request');
 const moment = require('moment-timezone');
 const appRoot = require('app-root-path');
 
+const TslApi = require('./API/TslApi');
+const Rate = require('./Services/Rate/Rate');
+const TotalOver25 = require('./Services/TotalOver25/TotalOver25');
+const Point = require('./Services/Point/Point');
+const Score = require('./Services/Score/Score');
 const Line = require('./LineBot/Line');
 const LineNotify = require('./LineNotify/LineNotify');
-const Constant = require('./utility/Constant');
 
-const APP_URL = 'http://220.134.223.104:8000/soccer';
+const Constant = require('./utility/Constant');
 
 // json folder
 const folderPath = `${appRoot}/json`;
@@ -19,146 +22,13 @@ if (!fs.existsSync(folderPath)) {
 }
 
 /**
- * getDateNow
- *
- */
-const getDateNow = () => {
-  return moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm');
-};
-
-/**
- * getGames
- * 取得所有足球賽事
- *
- */
-const getGames = () => {
-  return new Promise((resolve, reject) => {
-    request(
-      {
-        url: Constant.SOCCER_GAMES_JSON,
-        method: 'GET',
-        timeout: Constant.TIMEOUT,
-        gzip: true,
-        headers: Constant.HEADERS,
-      },
-      (error, response, body) => {
-        if (error) {
-          console.log('Error - Get games: ', error);
-
-          reject({ error });
-        } else {
-          console.log(
-            'StatusCode - Get games:',
-            response && response.statusCode
-          );
-
-          let data = null;
-          if (response && response.statusCode === 200) {
-            data = JSON.parse(body);
-          }
-          resolve(data);
-        }
-      }
-    );
-  });
-};
-
-/**
- * getGameDetail
- * 取得賽事賠率明細
- *
- * @param {*} ni
- */
-const getGameDetail = ni => {
-  return new Promise((resolve, reject) => {
-    request(
-      {
-        url: Constant.SOCCER_GAME.format(ni),
-        method: 'GET',
-        timeout: Constant.TIMEOUT,
-        gzip: true,
-        headers: Constant.HEADERS,
-      },
-      (error, response, body) => {
-        if (error) {
-          console.log('Error - Get details: ', error);
-
-          reject({ error });
-        } else {
-          let detailData = null;
-          if (response && response.statusCode === 200) {
-            detailData = JSON.parse(body);
-          }
-
-          resolve(detailData);
-        }
-      }
-    );
-  });
-};
-
-/**
  * getRates
  * 取得主客合賠率
  *
  * @param {*} type 0: 不讓球, 1: 讓球
  * @param {*} detail
  */
-const getRates = (type, detail) => {
-  let awayWin = Constant.GAME_TYPE.SINGLE.TYPE.AWAY_WIN;
-  let draw = Constant.GAME_TYPE.SINGLE.TYPE.DRAW;
-  let homeWin = Constant.GAME_TYPE.SINGLE.TYPE.HOME_WIN;
-
-  if (type === 1) {
-    awayWin = Constant.GAME_TYPE.HANDICAP.TYPE.AWAY_WIN;
-    draw = Constant.GAME_TYPE.HANDICAP.TYPE.DRAW;
-    homeWin = Constant.GAME_TYPE.HANDICAP.TYPE.HOME_WIN;
-  }
-
-  // 賠率
-  let rate = {
-    hi: 0,
-    draw: 0,
-    ai: 0,
-    v: '',
-    v1: '',
-    time: getDateNow(),
-  };
-
-  // 塞入讓球
-  rate.v = detail.v;
-  rate.v1 = detail.v1;
-
-  const tmpArray = detail.codes;
-  if (tmpArray) {
-    tmpArray.forEach(tmp => {
-      const c = tmp.c;
-
-      switch (c) {
-        // 客勝
-        case awayWin:
-          rate.ai = tmp.oddPerSet[1];
-          break;
-
-        // 合局
-        case draw:
-          rate.draw = tmp.oddPerSet[1];
-          break;
-
-        // 主勝
-        case homeWin:
-          rate.hi = tmp.oddPerSet[1];
-          break;
-      }
-    });
-  }
-
-  if (rate.ai === 0) {
-    return null;
-  }
-
-  return rate;
-};
+const getRates = (type, detail) => Rate.getRates(type, detail);
 
 /**
  * getTotalOver25
@@ -166,39 +36,7 @@ const getRates = (type, detail) => {
  *
  * @param {*} detail
  */
-const getTotalOver25 = detail => {
-  // 賠率
-  let rate = {
-    over: 0,
-    under: 0,
-    time: getDateNow(),
-  };
-
-  const tmpArray = detail.codes;
-  if (tmpArray) {
-    tmpArray.forEach(tmp => {
-      const c = tmp.c;
-
-      switch (c) {
-        // Over
-        case Constant.GAME_TYPE.TOTAL_OVER_25.TYPE.OVER:
-          rate.over = tmp.oddPerSet[1];
-          break;
-
-        // Under
-        case Constant.GAME_TYPE.TOTAL_OVER_25.TYPE.UNDER:
-          rate.under = tmp.oddPerSet[1];
-          break;
-      }
-    });
-  }
-
-  if (rate.over === 0) {
-    return null;
-  }
-
-  return rate;
-};
+const getTotalOver25 = detail => TotalOver25.getTotalOver25(detail);
 
 /**
  * getPonit
@@ -206,43 +44,7 @@ const getTotalOver25 = detail => {
  *
  * @param {*} detail
  */
-const getPonit = detail => {
-  // 賠率
-  let rate = {
-    A: 0, // 0-1 球
-    B: 0, // 2-3 球
-    C: 0, // 4+
-    time: getDateNow(),
-  };
-
-  const tmpArray = detail.codes;
-  if (tmpArray) {
-    tmpArray.forEach(tmp => {
-      const c = tmp.c;
-
-      switch (c) {
-        // 0-1 球
-        case Constant.GAME_TYPE.POINT.TYPE.A:
-          rate.A = tmp.oddPerSet[1];
-          break;
-        // 2-3 球
-        case Constant.GAME_TYPE.POINT.TYPE.B:
-          rate.B = tmp.oddPerSet[1];
-          break;
-        // 4+
-        case Constant.GAME_TYPE.POINT.TYPE.C:
-          rate.C = tmp.oddPerSet[1];
-          break;
-      }
-    });
-  }
-
-  if (rate.A === 0) {
-    return null;
-  }
-
-  return rate;
-};
+const getPonit = detail => Point.getPonit(detail);
 
 /**
  * getScore
@@ -250,172 +52,7 @@ const getPonit = detail => {
  *
  * @param {*} detail
  */
-const getScore = detail => {
-  // 賠率
-  let rate = {
-    '1_0': 0,
-    '0_0': 0,
-    '0_1': 0,
-    '2_0': 0,
-    '1_1': 0,
-    '0_2': 0,
-    '2_1': 0,
-    '2_2': 0,
-    '1_2': 0,
-    '3_0': 0,
-    '3_3': 0,
-    '0_3': 0,
-    '3_1': 0,
-    '4_4': 0,
-    '1_3': 0,
-    '3_2': 0,
-    '5_5': 0,
-    '2_3': 0,
-    '4_0': 0,
-    '0_4': 0,
-    '4_1': 0,
-    '1_4': 0,
-    '4_2': 0,
-    '2_4': 0,
-    '4_3': 0,
-    '3_4': 0,
-    '5_0': 0,
-    '0_5': 0,
-    '5_1': 0,
-    '1_5': 0,
-    '5_2': 0,
-    '2_5': 0,
-    '5_3': 0,
-    '3_5': 0,
-    '5_4': 0,
-    '4_5': 0,
-    time: getDateNow(),
-  };
-
-  const tmpArray = detail.codes;
-  if (tmpArray) {
-    tmpArray.forEach(tmp => {
-      const c = tmp.c;
-
-      switch (c) {
-        case Constant.GAME_TYPE.SCORE.TYPE['1_0']:
-          rate['1_0'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['0_0']:
-          rate['0_0'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['0_1']:
-          rate['0_1'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['2_0']:
-          rate['2_0'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['1_1']:
-          rate['1_1'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['0_2']:
-          rate['0_2'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['2_1']:
-          rate['2_1'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['2_2']:
-          rate['2_2'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['1_2']:
-          rate['1_2'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['3_0']:
-          rate['3_0'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['3_3']:
-          rate['3_3'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['0_3']:
-          rate['0_3'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['3_1']:
-          rate['3_1'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['4_4']:
-          rate['4_4'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['1_3']:
-          rate['1_3'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['3_2']:
-          rate['3_2'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['5_5']:
-          rate['5_5'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['2_3']:
-          rate['2_3'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['4_0']:
-          rate['4_0'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['0_4']:
-          rate['0_4'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['4_1']:
-          rate['4_1'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['1_4']:
-          rate['1_4'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['4_2']:
-          rate['4_2'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['2_4']:
-          rate['2_4'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['4_3']:
-          rate['4_3'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['3_4']:
-          rate['3_4'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['5_0']:
-          rate['5_0'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['0_5']:
-          rate['0_5'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['5_1']:
-          rate['5_1'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['1_5']:
-          rate['1_5'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['5_2']:
-          rate['5_2'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['2_5']:
-          rate['2_5'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['5_3']:
-          rate['5_3'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['3_5']:
-          rate['3_5'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['5_4']:
-          rate['5_4'] = tmp.oddPerSet[1];
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['4_5']:
-          rate['4_5'] = tmp.oddPerSet[1];
-          break;
-      }
-    });
-  }
-
-  if (rate['1_0'] === 0) {
-    return null;
-  }
-
-  return rate;
-};
+const getScore = detail => Score.getScore(detail);
 
 /**
  * checkRates
@@ -424,58 +61,7 @@ const getScore = detail => {
  * @param {*} obj
  * @param {*} detail
  */
-const checkRates = (type, obj, detail) => {
-  let awayWin = Constant.GAME_TYPE.SINGLE.TYPE.AWAY_WIN;
-  let draw = Constant.GAME_TYPE.SINGLE.TYPE.DRAW;
-  let homeWin = Constant.GAME_TYPE.SINGLE.TYPE.HOME_WIN;
-
-  let aiRate = obj.rates_single[obj.rates_single.length - 1].ai;
-  let drawRate = obj.rates_single[obj.rates_single.length - 1].draw;
-  let hiRate = obj.rates_single[obj.rates_single.length - 1].hi;
-
-  if (type === 1) {
-    awayWin = Constant.GAME_TYPE.HANDICAP.TYPE.AWAY_WIN;
-    draw = Constant.GAME_TYPE.HANDICAP.TYPE.DRAW;
-    homeWin = Constant.GAME_TYPE.HANDICAP.TYPE.HOME_WIN;
-
-    aiRate = obj.rates_handicap[obj.rates_handicap.length - 1].ai;
-    drawRate = obj.rates_handicap[obj.rates_handicap.length - 1].draw;
-    hiRate = obj.rates_handicap[obj.rates_handicap.length - 1].hi;
-  }
-
-  // 比較賠率是否有變動
-  let isChange = false;
-  const tmpArray = detail.codes;
-  if (tmpArray) {
-    tmpArray.forEach(tmp => {
-      const c = tmp.c;
-
-      switch (c) {
-        // 客勝
-        case awayWin:
-          if (aiRate !== tmp.oddPerSet[1]) {
-            isChange = true;
-          }
-          break;
-
-        // 合局
-        case draw:
-          if (drawRate !== tmp.oddPerSet[1]) {
-            isChange = true;
-          }
-          break;
-
-        // 主勝
-        case homeWin:
-          if (hiRate !== tmp.oddPerSet[1]) {
-            isChange = true;
-          }
-          break;
-      }
-    });
-  }
-  return isChange;
-};
+const checkRates = (type, obj, detail) => Rate.checkRates(type, obj, detail);
 
 /**
  * checkTotalOver25
@@ -483,39 +69,8 @@ const checkRates = (type, obj, detail) => {
  * @param {*} obj
  * @param {*} detail
  */
-const checkTotalOver25 = (obj, detail) => {
-  // 比較賠率是否有變動
-  let isChange = false;
-  const tmpArray = detail.codes;
-  if (tmpArray) {
-    tmpArray.forEach(tmp => {
-      const c = tmp.c;
-
-      switch (c) {
-        // Over
-        case Constant.GAME_TYPE.TOTAL_OVER_25.TYPE.OVER:
-          if (
-            obj.rates_total_over_25[obj.rates_total_over_25.length - 1].over !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-
-        // Under
-        case Constant.GAME_TYPE.TOTAL_OVER_25.TYPE.UNDER:
-          if (
-            obj.rates_total_over_25[obj.rates_total_over_25.length - 1]
-              .under !== tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-      }
-    });
-  }
-  return isChange;
-};
+const checkTotalOver25 = (obj, detail) =>
+  TotalOver25.checkTotalOver25(obj, detail);
 
 /**
  * checkPonit
@@ -523,44 +78,7 @@ const checkTotalOver25 = (obj, detail) => {
  * @param {*} obj
  * @param {*} detail
  */
-const checkPonit = (obj, detail) => {
-  // 比較賠率是否有變動
-  let isChange = false;
-  const tmpArray = detail.codes;
-  if (tmpArray) {
-    tmpArray.forEach(tmp => {
-      const c = tmp.c;
-
-      switch (c) {
-        // 0-1 球
-        case Constant.GAME_TYPE.POINT.TYPE.A:
-          if (
-            obj.rates_point[obj.rates_point.length - 1].A !== tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        // 2-3 球
-        case Constant.GAME_TYPE.POINT.TYPE.B:
-          if (
-            obj.rates_point[obj.rates_point.length - 1].B !== tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        // 4+
-        case Constant.GAME_TYPE.POINT.TYPE.C:
-          if (
-            obj.rates_point[obj.rates_point.length - 1].C !== tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-      }
-    });
-  }
-  return isChange;
-};
+const checkPonit = (obj, detail) => Point.checkPonit(obj, detail);
 
 /**
  * checkScore
@@ -569,309 +87,7 @@ const checkPonit = (obj, detail) => {
  * @param {*} obj
  * @param {*} detail
  */
-const checkScore = (obj, detail) => {
-  // 比較賠率是否有變動
-  let isChange = false;
-  const tmpArray = detail.codes;
-
-  if (tmpArray) {
-    tmpArray.forEach(tmp => {
-      const c = tmp.c;
-      switch (c) {
-        case Constant.GAME_TYPE.SCORE.TYPE['1_0']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['1_0'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['0_0']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['0_0'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['0_1']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['0_1'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['2_0']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['2_0'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['1_1']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['1_1'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['0_2']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['0_2'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['2_1']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['2_1'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['2_2']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['2_2'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['1_2']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['1_2'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['3_0']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['3_0'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['3_3']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['3_3'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['0_3']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['0_3'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['3_1']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['3_1'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['4_4']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['4_4'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['1_3']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['1_3'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['3_2']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['3_2'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['5_5']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['5_5'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['2_3']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['2_3'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['4_0']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['4_0'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['0_4']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['0_4'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['4_1']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['4_1'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['1_4']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['1_4'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['4_2']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['4_2'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['2_4']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['2_4'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['4_3']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['4_3'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['3_4']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['3_4'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['5_0']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['5_0'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['0_5']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['0_5'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['5_1']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['5_1'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['1_5']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['1_5'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['5_2']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['5_2'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['2_5']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['2_5'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['5_3']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['5_3'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['3_5']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['3_5'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['5_4']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['5_4'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-        case Constant.GAME_TYPE.SCORE.TYPE['4_5']:
-          if (
-            obj.rates_score[obj.rates_score.length - 1]['4_5'] !==
-            tmp.oddPerSet[1]
-          ) {
-            isChange = true;
-          }
-          break;
-      }
-    });
-  }
-
-  return isChange;
-};
+const checkScore = (obj, detail) => Score.checkScore(obj, detail);
 
 /**
  * saveFile
@@ -990,15 +206,19 @@ const compareData = detailData => {
     if (isChange) {
       console.log(`${obj.code} - Rates is changed.`);
 
-      const message = `比賽日期: ${obj.date}\n賽事: ${obj.code}\n隊伍: ${
+      let message = `比賽日期: ${obj.date}\n賽事: ${obj.code}\n隊伍: ${
         obj.teams.ai
-      } @ ${obj.teams.hi}\n賠率已異動。\n${APP_URL}?gameCode=${obj.code}`;
+      } @ ${obj.teams.hi}\n賠率已異動。\n${Constant.APP_URL}?gameCode=${
+        obj.code
+      }`;
 
       sendMessage(message);
-    }
 
-    // 寫入檔案
-    saveFile(fileName, JSON.stringify(obj));
+      message = Point.getNotifyMessage(obj);
+      if (message) {
+        sendMessage(message);
+      }
+    }
   } else {
     // 賽事編號
     obj.code = detailData.code;
@@ -1062,24 +282,14 @@ const compareData = detailData => {
       }
     });
 
-    // 檢查 2-3 球賠率是否在 1.85
-    if (obj.rates_point && obj.rates_point.length > 0) {
-      const tmpRate = obj.rates_point[obj.rates_point.length - 1].B;
-
-      if (tmpRate >= 1.85 && tmpRate <= 1.9 && obj.mins === 1) {
-        const message = `比賽日期: ${obj.date}\n賽事: ${obj.code}\n隊伍: ${
-          obj.teams.ai
-        } @ ${
-          obj.teams.hi
-        }\n單場 2-3 球賠率落在 1.85 ~ 1.9。\n${APP_URL}?gameCode=${obj.code}`;
-
-        sendMessage(message);
-      }
+    const message = Point.getNotifyMessage(obj);
+    if (message) {
+      sendMessage(message);
     }
-
-    // 寫入檔案
-    saveFile(fileName, JSON.stringify(obj));
   }
+
+  // 寫入檔案
+  saveFile(fileName, JSON.stringify(obj));
 };
 
 /**
@@ -1087,6 +297,7 @@ const compareData = detailData => {
  *
  */
 const rateCrawler = async () => {
+  console.log('');
   console.log(
     `=========== Crawler start: ${moment().format(
       'YYYY-MM-DD HH:mm:ss'
@@ -1096,7 +307,7 @@ const rateCrawler = async () => {
   // 取得所有足球賽事
   let data = null;
   try {
-    data = await getGames();
+    data = await TslApi.getGames();
   } catch (e) {
     console.log(e);
   }
@@ -1106,7 +317,7 @@ const rateCrawler = async () => {
       // 取得賽事賠率明細
       let detailData = null;
       try {
-        detailData = await getGameDetail(item.ni);
+        detailData = await TslApi.getGameDetail(item.ni);
       } catch (e) {
         console.log(e);
       }

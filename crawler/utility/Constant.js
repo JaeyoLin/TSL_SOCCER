@@ -1,3 +1,5 @@
+const moment = require('moment-timezone');
+
 const TIMEOUT = 5000;
 const SOCCER_GAMES_JSON =
   'https://www.sportslottery.com.tw/web/services/rs/betting/games/15102/0.json?status=active&limit=41&action=excludeTournamentWithExceptionPriority&marketLimit=1&sportId=s-441&locale=tw&brandId=defaultBrand&channelId=1';
@@ -15,6 +17,19 @@ const HEADERS = {
   'User-Agent':
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36',
   'X-Requested-With': 'XMLHttpRequest',
+};
+
+/**
+ * Web app url
+ */
+const APP_URL = 'http://220.134.223.104:8000/soccer';
+
+/**
+ * getDateNow
+ *
+ */
+const getDateNow = () => {
+  return moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm');
 };
 
 const GAME_TYPE = {
@@ -109,6 +124,8 @@ const Constant = {
   TIMEOUT,
   HEADERS,
   GAME_TYPE,
+  APP_URL,
+  getDateNow,
 };
 
 module.exports = Constant;
