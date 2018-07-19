@@ -52,9 +52,15 @@ const styles = theme => ({
     paddingBottom: '10px',
   },
   content: {
-    flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 2,
+    [theme.breakpoints.up('md')]: {
+      flexGrow: 1,
+      padding: theme.spacing.unit * 2,
+    },
+    [theme.breakpoints.down('md')]: {
+      margin: '0 auto',
+      width: '95%',
+    },
   },
   toolbar: theme.mixins.toolbar,
   selectMenu: {
