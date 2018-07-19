@@ -22,7 +22,7 @@ const HEADERS = {
 /**
  * Web app url
  */
-const APP_URL = 'http://220.134.223.104:8000/soccer';
+const APP_URL = 'http://aaronlin.net/soccer';
 
 /**
  * getDateNow

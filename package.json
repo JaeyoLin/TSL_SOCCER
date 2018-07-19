@@ -7,7 +7,7 @@
     "crawler": "node crawler/index.js",
     "start": "next -p 8000",
     "build": "next build",
-    "prod": "next start -p 8000"
+    "prod": "next start -p 80"
   },
   "repository": {
     "type": "git",
