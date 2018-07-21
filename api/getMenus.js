@@ -44,7 +44,7 @@ const getMenus = () => {
               moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm') <
               moment(a.date)
                 .tz('Asia/Taipei')
-                .add(2, 'h')
+                .add(3, 'h')
                 .format('YYYY-MM-DD HH:mm')
             );
           });
