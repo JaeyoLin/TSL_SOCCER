@@ -92,7 +92,7 @@ const checkRates = (type, obj, detail) => {
     hiRate = obj.rates_handicap[obj.rates_handicap.length - 1].hi;
 
     // 讓球需判斷是否有變盤
-    if (obj.v1 !== detail.v1) {
+    if (obj.rates_handicap[obj.rates_handicap.length - 1].v1 !== detail.v1) {
       isChange = true;
     }
   }
