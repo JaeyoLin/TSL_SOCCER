@@ -17,6 +17,7 @@ class App extends React.Component {
 
     this.state = {
       open: false,
+      openDetail: false,
       gameCode: this.props.gameCode,
     };
   }
@@ -63,6 +64,16 @@ class App extends React.Component {
     this.setState({ open: false });
   };
 
+  /**
+   * handleToggleScoreDetail
+   *
+   */
+  handleToggleScoreDetail = () => {
+    this.setState({
+      openDetail: !this.state.openDetail,
+    });
+  };
+
   render() {
     const { classes, data } = this.props;
     let gameData = {
@@ -99,7 +110,11 @@ class App extends React.Component {
         >
           <div className={classes.toolbar} />
           <Typography noWrap>
-            <Content gameData={gameData[0]} />
+            <Content
+              openDetail={this.state.openDetail}
+              toggleScoreDetail={this.handleToggleScoreDetail}
+              gameData={gameData[0]}
+            />
           </Typography>
         </main>
       </div>

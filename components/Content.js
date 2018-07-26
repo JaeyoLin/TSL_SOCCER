@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
 import { Table } from 'reactstrap';
 
 // import List from '@material-ui/core/List';
@@ -14,6 +15,9 @@ import DateRangeIcon from '@material-ui/icons/DateRange';
 import PollIcon from '@material-ui/icons/Poll';
 import GroupIcon from '@material-ui/icons/Group';
 import CasinoIcon from '@material-ui/icons/Casino';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+
 import { Container, Row, Col } from 'reactstrap';
 
 import Score from './Score';
@@ -44,10 +48,15 @@ const styles = theme => ({
   test: {
     color: 'green',
   },
+  avatar: {
+    right: '12px',
+    position: 'absolute',
+    backgroundColor: 'skyblue',
+  },
 });
 
 const Content = props => {
-  const { classes, gameData } = props;
+  const { openDetail, toggleScoreDetail, classes, gameData } = props;
 
   let code = '';
   let date = '';
@@ -123,6 +132,13 @@ const Content = props => {
 
     return returnComponent;
   };
+
+  let scoreComponent = null;
+  if (openDetail) {
+    scoreComponent = <ExpandMoreIcon />;
+  } else {
+    scoreComponent = <ExpandLessIcon />;
+  }
 
   return (
     <div>
@@ -357,8 +373,19 @@ const Content = props => {
                 正確比分 ({rates_score[rates_score.length - 1].time})
               </Typography>
             </div>
+            {rates_score.length > 1 ? (
+              <IconButton
+                color="inherit"
+                className={classes.avatar}
+                onClick={() => {
+                  toggleScoreDetail();
+                }}
+              >
+                {scoreComponent}
+              </IconButton>
+            ) : null}
           </Toolbar>
-          <Score data={rates_score} />
+          <Score openDetail={openDetail} data={rates_score} />
         </Paper>
       ) : null}
     </div>
@@ -366,6 +393,8 @@ const Content = props => {
 };
 
 Content.propTypes = {
+  openDetail: PropTypes.bool.isRequired,
+  toggleScoreDetail: PropTypes.func.isRequired,
   gameData: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 };
