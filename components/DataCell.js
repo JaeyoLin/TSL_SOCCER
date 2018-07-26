@@ -40,7 +40,7 @@ const DataCell = props => {
   } else {
     returnComponent = (
       <span>
-        <i class="fas fa-circle fa-1g">
+        <i class="fas fa-caret-right fa-1g">
           {parseFloat(Math.round(rate * 100) / 100).toFixed(2)}
         </i>
       </span>
