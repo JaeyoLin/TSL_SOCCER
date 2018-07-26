@@ -80,7 +80,7 @@ const Content = props => {
   let hiHandicap = hiName; // 主
 
   if (rates_handicap && rates_handicap.length && rates_handicap.length > 0) {
-    const v1 = rates_handicap[0].v1;
+    const v1 = rates_handicap[rates_handicap.length - 1].v1;
 
     if (v1 === -1) {
       aiHandicap = `(+1)`;

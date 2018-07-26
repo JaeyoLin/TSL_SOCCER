@@ -71,6 +71,8 @@ const getRates = (type, detail) => {
  * @param {*} detail
  */
 const checkRates = (type, obj, detail) => {
+  let isChange = false;
+
   let awayWin = Constant.GAME_TYPE.SINGLE.TYPE.AWAY_WIN;
   let draw = Constant.GAME_TYPE.SINGLE.TYPE.DRAW;
   let homeWin = Constant.GAME_TYPE.SINGLE.TYPE.HOME_WIN;
@@ -79,6 +81,7 @@ const checkRates = (type, obj, detail) => {
   let drawRate = obj.rates_single[obj.rates_single.length - 1].draw;
   let hiRate = obj.rates_single[obj.rates_single.length - 1].hi;
 
+  // 讓球
   if (type === 1) {
     awayWin = Constant.GAME_TYPE.HANDICAP.TYPE.AWAY_WIN;
     draw = Constant.GAME_TYPE.HANDICAP.TYPE.DRAW;
@@ -87,10 +90,14 @@ const checkRates = (type, obj, detail) => {
     aiRate = obj.rates_handicap[obj.rates_handicap.length - 1].ai;
     drawRate = obj.rates_handicap[obj.rates_handicap.length - 1].draw;
     hiRate = obj.rates_handicap[obj.rates_handicap.length - 1].hi;
+
+    // 讓球需判斷是否有變盤
+    if (obj.v1 !== detail.v1) {
+      isChange = true;
+    }
   }
 
   // 比較賠率是否有變動
-  let isChange = false;
   const tmpArray = detail.codes;
   if (tmpArray) {
     tmpArray.forEach(tmp => {
