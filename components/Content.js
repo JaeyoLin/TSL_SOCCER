@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import { Table } from 'reactstrap';
@@ -32,11 +31,18 @@ const styles = theme => ({
     width: '100%',
     textAlign: 'center',
   },
-  toolbar: {
-    backgroundColor: 'skyblue',
-  },
   title: {
+    backgroundColor: '#4caf50',
+    padding: '10px 24px 10px',
     flex: '0 0 auto',
+    minHeight: '48px',
+  },
+  title_button: {
+    display: 'grid',
+    backgroundColor: '#4caf50',
+    padding: '10px 24px 10px',
+    flex: '0 0 auto',
+    minHeight: '48px',
   },
   draw: {},
   down: {
@@ -49,9 +55,13 @@ const styles = theme => ({
     color: 'green',
   },
   avatar: {
-    right: '12px',
+    right: '20px',
     position: 'absolute',
-    backgroundColor: 'skyblue',
+    backgroundColor: '#4caf50',
+  },
+  menuIcon: {
+    color: 'white',
+    backgroundColor: '#00acc1',
   },
 });
 
@@ -147,7 +157,7 @@ const Content = props => {
           {mins ? (
             <Col xs="12" sm="6">
               <ListItem>
-                <Avatar>
+                <Avatar className={classes.menuIcon}>
                   <CasinoIcon />
                 </Avatar>
                 <ListItemText primary="過關數量" secondary={mins} />
@@ -157,7 +167,7 @@ const Content = props => {
 
           <Col xs="12" sm="6">
             <ListItem>
-              <Avatar>
+              <Avatar className={classes.menuIcon}>
                 <PollIcon />
               </Avatar>
               <ListItemText primary="賽事編號" secondary={code} />
@@ -165,7 +175,7 @@ const Content = props => {
           </Col>
           <Col xs="12" sm="6">
             <ListItem>
-              <Avatar>
+              <Avatar className={classes.menuIcon}>
                 <DateRangeIcon />
               </Avatar>
               <ListItemText primary="比賽日期" secondary={date} />
@@ -173,7 +183,7 @@ const Content = props => {
           </Col>
           <Col xs="12" sm="6">
             <ListItem>
-              <Avatar>
+              <Avatar className={classes.menuIcon}>
                 <GroupIcon />
               </Avatar>
               <ListItemText
@@ -187,13 +197,11 @@ const Content = props => {
 
       {rates_single.length > 0 ? (
         <Paper className={classes.root}>
-          <Toolbar className={classes.toolbar}>
-            <div className={classes.title}>
-              <Typography variant="title" id="tableTitle">
-                不讓球
-              </Typography>
-            </div>
-          </Toolbar>
+          <div className={classes.title}>
+            <Typography variant="title" id="tableTitle">
+              不讓球
+            </Typography>
+          </div>
           <Table className={classes.table}>
             <thead>
               <tr>
@@ -231,13 +239,11 @@ const Content = props => {
 
       {rates_handicap.length > 0 ? (
         <Paper className={classes.root}>
-          <Toolbar className={classes.toolbar}>
-            <div className={classes.title}>
-              <Typography variant="title" id="tableTitle">
-                讓球
-              </Typography>
-            </div>
-          </Toolbar>
+          <div className={classes.title}>
+            <Typography variant="title" id="tableTitle">
+              讓球
+            </Typography>
+          </div>
           <Table className={classes.table}>
             <thead>
               <tr>
@@ -283,13 +289,11 @@ const Content = props => {
 
       {rates_total_over_25.length > 0 ? (
         <Paper className={classes.root}>
-          <Toolbar className={classes.toolbar}>
-            <div className={classes.title}>
-              <Typography variant="title" id="tableTitle">
-                2.5 大小
-              </Typography>
-            </div>
-          </Toolbar>
+          <div className={classes.title}>
+            <Typography variant="title" id="tableTitle">
+              2.5 大小
+            </Typography>
+          </div>
           <Table className={classes.table}>
             <thead>
               <tr>
@@ -323,13 +327,11 @@ const Content = props => {
 
       {rates_point.length > 0 ? (
         <Paper className={classes.root}>
-          <Toolbar className={classes.toolbar}>
-            <div className={classes.title}>
-              <Typography variant="title" id="tableTitle">
-                進球數
-              </Typography>
-            </div>
-          </Toolbar>
+          <div className={classes.title}>
+            <Typography variant="title" id="tableTitle">
+              進球數
+            </Typography>
+          </div>
           <Table className={classes.table}>
             <thead>
               <tr>
@@ -367,12 +369,11 @@ const Content = props => {
 
       {rates_score.length > 0 ? (
         <Paper className={classes.root}>
-          <Toolbar className={classes.toolbar}>
-            <div className={classes.title}>
-              <Typography variant="title" id="tableTitle">
-                正確比分 ({rates_score[rates_score.length - 1].time})
-              </Typography>
-            </div>
+          <div className={classes.title_button}>
+            <Typography variant="title" id="tableTitle">
+              正確比分 ({rates_score[rates_score.length - 1].time})
+            </Typography>
+
             {rates_score.length > 1 ? (
               <IconButton
                 color="inherit"
@@ -384,7 +385,7 @@ const Content = props => {
                 {scoreComponent}
               </IconButton>
             ) : null}
-          </Toolbar>
+          </div>
           <Score openDetail={openDetail} data={rates_score} />
         </Paper>
       ) : null}

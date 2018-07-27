@@ -12,7 +12,8 @@ const styles = theme => ({
   appBar: {
     position: 'absolute',
     marginLeft: drawerWidth,
-    background: 'cadetblue',
+    background: 'black',
+    opacity: '0.8',
     [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`,
     },
@@ -25,16 +26,20 @@ const styles = theme => ({
   avatar: {
     right: '12px',
     position: 'absolute',
-    backgroundColor: 'cadetblue',
+    backgroundColor: 'black',
   },
   drawerPaper: {
+    paddingTop: '0px',
     width: drawerWidth,
     height: '100%',
+    background: 'black',
+    opacity: '0.8',
     [theme.breakpoints.up('md')]: {
       position: 'relative',
     },
   },
   drawerHeader: {
+    paddingTop: '0px',
     display: 'flex',
     alignItems: 'center',
     [theme.breakpoints.up('md')]: {
@@ -47,12 +52,23 @@ const styles = theme => ({
   },
   drawDateTime: {
     textAlign: 'center',
-    backgroundColor: 'darkgray',
-    paddingTop: '10px',
-    paddingBottom: '10px',
+    backgroundColor: 'cadetblue',
+    paddingTop: '5px',
+    paddingBottom: '5px',
+  },
+  menu: {
+    paddingTop: '0px',
+  },
+  menuIcon: {
+    color: 'white',
+    backgroundColor: '#00acc1',
+  },
+  menuTitle: {
+    color: 'white',
+    fontSize: '14px',
   },
   content: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: '#fafafa',
     [theme.breakpoints.up('md')]: {
       flexGrow: 1,
       padding: theme.spacing.unit * 2,
@@ -64,7 +80,7 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
   selectMenu: {
-    backgroundColor: 'lightcoral',
+    background: 'linear-gradient(60deg, #ffa726, #fb8c00)',
   },
   menuButton: {
     marginLeft: 0,

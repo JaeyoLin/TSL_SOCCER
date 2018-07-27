@@ -45,6 +45,7 @@ class App extends React.Component {
     this.setState({
       gameCode,
       open: false,
+      openDetail: false,
     });
   };
 

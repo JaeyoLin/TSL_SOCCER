@@ -70,8 +70,12 @@ const Header = props => {
           button
           className={className}
         >
-          <Avatar>{minsComponent}</Avatar>
+          <Avatar className={classes.menuIcon}>{minsComponent}</Avatar>
           <ListItemText
+            classes={{
+              primary: classes.menuTitle,
+              secondary: classes.menuTitle,
+            }}
             primary={`${item.code} - ${item.league}`}
             secondary={`${item.teams.ai} @ ${item.teams.hi}`}
           />
@@ -86,12 +90,19 @@ const Header = props => {
         <List>
           <ListItem>
             <Avatar />
-            <ListItemText primary="TSL" secondary="v1.0.0" />
+            <ListItemText
+              classes={{
+                primary: classes.menuTitle,
+                secondary: classes.menuTitle,
+              }}
+              primary="TSL"
+              secondary="v1.0.0"
+            />
           </ListItem>
         </List>
       </div>
-      <Divider />
-      <List>{listItems}</List>
+      <List className={classes.menu}>{listItems}</List>
+      <div className={classes.menuBack} />
     </div>
   );
 

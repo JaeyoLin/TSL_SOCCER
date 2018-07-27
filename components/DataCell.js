@@ -6,7 +6,12 @@ import { Container, Row, Col } from 'reactstrap';
 
 const styles = theme => ({
   col: {
-    textAlign: 'center',
+    textAlign: 'right',
+    paddingRight: '15px',
+    [theme.breakpoints.down('md')]: {
+      paddingRight: '0px',
+      paddingLeft: '0px',
+    },
   },
   down: {
     color: 'red',
@@ -40,7 +45,7 @@ const DataCell = props => {
   } else {
     returnComponent = (
       <span>
-        <i class="fas fa-caret-right fa-1g">
+        <i class="fas fa-1g">
           {parseFloat(Math.round(rate * 100) / 100).toFixed(2)}
         </i>
       </span>
@@ -54,8 +59,12 @@ const DataCell = props => {
       <Col className={classes.col}>
         <Container>
           <Row>
-            <Col className={classes.col}>{title}</Col>
-            <Col className={classes.col}>{returnComponent}</Col>
+            <Col xs="6" className={classes.col}>
+              {title}
+            </Col>
+            <Col xs="6" className={classes.col}>
+              {returnComponent}
+            </Col>
           </Row>
         </Container>
       </Col>
