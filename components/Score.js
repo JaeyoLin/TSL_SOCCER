@@ -78,6 +78,51 @@ class Score extends React.Component {
         key2 = '5_5';
         key3 = '2_3';
         break;
+      case 7:
+        key1 = '4_0';
+        key2 = '';
+        key3 = '0_4';
+        break;
+      case 8:
+        key1 = '4_1';
+        key2 = '';
+        key3 = '1_4';
+        break;
+      case 9:
+        key1 = '4_2';
+        key2 = '';
+        key3 = '2_4';
+        break;
+      case 10:
+        key1 = '4_3';
+        key2 = '';
+        key3 = '3_4';
+        break;
+      case 11:
+        key1 = '5_0';
+        key2 = '';
+        key3 = '0_5';
+        break;
+      case 12:
+        key1 = '5_1';
+        key2 = '';
+        key3 = '1_5';
+        break;
+      case 13:
+        key1 = '5_2';
+        key2 = '';
+        key3 = '2_5';
+        break;
+      case 14:
+        key1 = '5_3';
+        key2 = '';
+        key3 = '3_5';
+        break;
+      case 15:
+        key1 = '5_4';
+        key2 = '';
+        key3 = '4_5';
+        break;
     }
 
     returnComponent = data.map((item, index) => {
@@ -91,7 +136,11 @@ class Score extends React.Component {
         return (
           <Row>
             <DataCell rate={rate[key1]} compareRate={compareRate[key1]} />
-            <DataCell rate={rate[key2]} compareRate={compareRate[key2]} />
+            {key2 !== '' ? (
+              <DataCell rate={rate[key2]} compareRate={compareRate[key2]} />
+            ) : (
+              <DataCell />
+            )}
             <DataCell rate={rate[key3]} compareRate={compareRate[key3]} />
           </Row>
         );
@@ -247,7 +296,11 @@ class Score extends React.Component {
           />
         </Row>
         <Divider className={classes.hr} />
-        <Row>
+        <Collapse isOpen={openDetail}>
+          {this.getRowHistoryRecord(7)}
+          <Divider className={classes.hr1} />
+        </Collapse>
+        <Row className={openDetail ? classes.main : null}>
           <DataCell
             title="4 : 0"
             rate={rate['4_0']}
@@ -261,7 +314,11 @@ class Score extends React.Component {
           />
         </Row>
         <Divider className={classes.hr} />
-        <Row>
+        <Collapse isOpen={openDetail}>
+          {this.getRowHistoryRecord(8)}
+          <Divider className={classes.hr1} />
+        </Collapse>
+        <Row className={openDetail ? classes.main : null}>
           <DataCell
             title="4 : 1"
             rate={rate['4_1']}
@@ -275,7 +332,11 @@ class Score extends React.Component {
           />
         </Row>
         <Divider className={classes.hr} />
-        <Row>
+        <Collapse isOpen={openDetail}>
+          {this.getRowHistoryRecord(9)}
+          <Divider className={classes.hr1} />
+        </Collapse>
+        <Row className={openDetail ? classes.main : null}>
           <DataCell
             title="4 : 2"
             rate={rate['4_2']}
@@ -289,7 +350,11 @@ class Score extends React.Component {
           />
         </Row>
         <Divider className={classes.hr} />
-        <Row>
+        <Collapse isOpen={openDetail}>
+          {this.getRowHistoryRecord(10)}
+          <Divider className={classes.hr1} />
+        </Collapse>
+        <Row className={openDetail ? classes.main : null}>
           <DataCell
             title="4 : 3"
             rate={rate['4_3']}
@@ -303,7 +368,11 @@ class Score extends React.Component {
           />
         </Row>
         <Divider className={classes.hr} />
-        <Row>
+        <Collapse isOpen={openDetail}>
+          {this.getRowHistoryRecord(11)}
+          <Divider className={classes.hr1} />
+        </Collapse>
+        <Row className={openDetail ? classes.main : null}>
           <DataCell
             title="5+ : 0"
             rate={rate['5_0']}
@@ -317,7 +386,11 @@ class Score extends React.Component {
           />
         </Row>
         <Divider className={classes.hr} />
-        <Row>
+        <Collapse isOpen={openDetail}>
+          {this.getRowHistoryRecord(12)}
+          <Divider className={classes.hr1} />
+        </Collapse>
+        <Row className={openDetail ? classes.main : null}>
           <DataCell
             title="5+ : 1"
             rate={rate['5_1']}
@@ -331,7 +404,11 @@ class Score extends React.Component {
           />
         </Row>
         <Divider className={classes.hr} />
-        <Row>
+        <Collapse isOpen={openDetail}>
+          {this.getRowHistoryRecord(13)}
+          <Divider className={classes.hr1} />
+        </Collapse>
+        <Row className={openDetail ? classes.main : null}>
           <DataCell
             title="5+ : 2"
             rate={rate['5_2']}
@@ -345,7 +422,11 @@ class Score extends React.Component {
           />
         </Row>
         <Divider className={classes.hr} />
-        <Row>
+        <Collapse isOpen={openDetail}>
+          {this.getRowHistoryRecord(14)}
+          <Divider className={classes.hr1} />
+        </Collapse>
+        <Row className={openDetail ? classes.main : null}>
           <DataCell
             title="5+ : 3"
             rate={rate['5_3']}
@@ -359,7 +440,11 @@ class Score extends React.Component {
           />
         </Row>
         <Divider className={classes.hr} />
-        <Row>
+        <Collapse isOpen={openDetail}>
+          {this.getRowHistoryRecord(15)}
+          <Divider className={classes.hr1} />
+        </Collapse>
+        <Row className={openDetail ? classes.main : null}>
           <DataCell
             title="5+ : 4"
             rate={rate['5_4']}

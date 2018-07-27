@@ -73,60 +73,63 @@ const getRates = (type, detail) => {
 const checkRates = (type, obj, detail) => {
   let isChange = false;
 
-  let awayWin = Constant.GAME_TYPE.SINGLE.TYPE.AWAY_WIN;
-  let draw = Constant.GAME_TYPE.SINGLE.TYPE.DRAW;
-  let homeWin = Constant.GAME_TYPE.SINGLE.TYPE.HOME_WIN;
+  if (obj.rates_single.length !== 0) {
+    let awayWin = Constant.GAME_TYPE.SINGLE.TYPE.AWAY_WIN;
+    let draw = Constant.GAME_TYPE.SINGLE.TYPE.DRAW;
+    let homeWin = Constant.GAME_TYPE.SINGLE.TYPE.HOME_WIN;
 
-  let aiRate = obj.rates_single[obj.rates_single.length - 1].ai;
-  let drawRate = obj.rates_single[obj.rates_single.length - 1].draw;
-  let hiRate = obj.rates_single[obj.rates_single.length - 1].hi;
+    let aiRate = obj.rates_single[obj.rates_single.length - 1].ai;
+    let drawRate = obj.rates_single[obj.rates_single.length - 1].draw;
+    let hiRate = obj.rates_single[obj.rates_single.length - 1].hi;
 
-  // 讓球
-  if (type === 1) {
-    awayWin = Constant.GAME_TYPE.HANDICAP.TYPE.AWAY_WIN;
-    draw = Constant.GAME_TYPE.HANDICAP.TYPE.DRAW;
-    homeWin = Constant.GAME_TYPE.HANDICAP.TYPE.HOME_WIN;
+    // 讓球
+    if (type === 1) {
+      awayWin = Constant.GAME_TYPE.HANDICAP.TYPE.AWAY_WIN;
+      draw = Constant.GAME_TYPE.HANDICAP.TYPE.DRAW;
+      homeWin = Constant.GAME_TYPE.HANDICAP.TYPE.HOME_WIN;
 
-    aiRate = obj.rates_handicap[obj.rates_handicap.length - 1].ai;
-    drawRate = obj.rates_handicap[obj.rates_handicap.length - 1].draw;
-    hiRate = obj.rates_handicap[obj.rates_handicap.length - 1].hi;
+      aiRate = obj.rates_handicap[obj.rates_handicap.length - 1].ai;
+      drawRate = obj.rates_handicap[obj.rates_handicap.length - 1].draw;
+      hiRate = obj.rates_handicap[obj.rates_handicap.length - 1].hi;
 
-    // 讓球需判斷是否有變盤
-    if (obj.rates_handicap[obj.rates_handicap.length - 1].v1 !== detail.v1) {
-      isChange = true;
+      // 讓球需判斷是否有變盤
+      if (obj.rates_handicap[obj.rates_handicap.length - 1].v1 !== detail.v1) {
+        isChange = true;
+      }
+    }
+
+    // 比較賠率是否有變動
+    const tmpArray = detail.codes;
+    if (tmpArray) {
+      tmpArray.forEach(tmp => {
+        const c = tmp.c;
+
+        switch (c) {
+          // 客勝
+          case awayWin:
+            if (aiRate !== tmp.oddPerSet[1]) {
+              isChange = true;
+            }
+            break;
+
+          // 合局
+          case draw:
+            if (drawRate !== tmp.oddPerSet[1]) {
+              isChange = true;
+            }
+            break;
+
+          // 主勝
+          case homeWin:
+            if (hiRate !== tmp.oddPerSet[1]) {
+              isChange = true;
+            }
+            break;
+        }
+      });
     }
   }
 
-  // 比較賠率是否有變動
-  const tmpArray = detail.codes;
-  if (tmpArray) {
-    tmpArray.forEach(tmp => {
-      const c = tmp.c;
-
-      switch (c) {
-        // 客勝
-        case awayWin:
-          if (aiRate !== tmp.oddPerSet[1]) {
-            isChange = true;
-          }
-          break;
-
-        // 合局
-        case draw:
-          if (drawRate !== tmp.oddPerSet[1]) {
-            isChange = true;
-          }
-          break;
-
-        // 主勝
-        case homeWin:
-          if (hiRate !== tmp.oddPerSet[1]) {
-            isChange = true;
-          }
-          break;
-      }
-    });
-  }
   return isChange;
 };
 
